@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+/* General */
+input {
+    outline: none;
+    font-size: 1.5rem;
+    padding: 0.6rem;
+    padding-left: 0.8rem;
+    font-family: 'Poppins', sans-serif;
+    background-color: rgb(80, 50, 80);
+    border: 1px solid black;
+    border-right: none;
+    border-radius: 0.5rem;
+    color: whitesmoke;
+}
+
+button {
+    border: 1px solid black;
+    border-left: none;
+    padding: 0.5rem;
+    background-color: rgb(80, 50, 80);
+    border-radius: 0 0.5rem 0.5rem 0;
+}
+
+
+/* Classes */
+.init-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+}
+
+.manga-search-container {
+    display: flex;
+    height: 90vh;
+    align-items: center;
+}
+
+.manga-submit {
+    display: flex;
+    flex-direction: row;
+    -webkit-box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.57);
+    box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.57);
+}
+
+.site-header {
+    position: absolute;
+    text-align: center;
+}
+
+
+/* IDs */
+#manga-search {
+    width: 50vw;
+}
+
+#header-head {
+    font-size: 5vw;
+    margin-bottom: 0;
+}
