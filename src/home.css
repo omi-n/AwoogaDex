@@ -63,7 +63,9 @@ input::-ms-input-placeholder {
 }
 
 .manga-text-info {
+    display: inline;
     padding: 1rem;
+    padding-top: 1.5rem;
     border-left: 2px solid black;
 }
 
@@ -100,7 +102,13 @@ input::-ms-input-placeholder {
     /* Classes */
     .manga-card {
         display: flex;
-        max-width: 85vw;
+        width: 85vw;
+        height: 35vh;
+    }
+
+    .manga-text-info {
+        border-left: 2px solid black;
+        overflow-y: scroll;
     }
 
     /* IDs */

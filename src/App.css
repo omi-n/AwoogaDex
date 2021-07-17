@@ -8,6 +8,12 @@
     color: white;
 }
 
+a {
+    text-decoration: none;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
 .App {
     font-family: 'Poppins', sans-serif;
 }
