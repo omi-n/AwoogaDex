@@ -93,7 +93,7 @@ function SearchManga() {
             for (let i = 0; i < mangas.length; i++) {
                 for (let j = 0; j < coverLinkArray.length; j++) {
                     if (coverLinkArray[j].relationships[0].id === mangas[i].mangaID)
-                        mangas[i].coverLink = `https://uploads.mangadex.org/covers/${mangas[i].mangaID}/${coverLinkArray[j].data.attributes.fileName}`;
+                        mangas[i].coverLink = `https://uploads.mangadex.org/covers/${mangas[i].mangaID}/${coverLinkArray[j].data.attributes.fileName}.256.jpg`;
                 }
             }
             // console.log("response mangas: ", responseArr);
