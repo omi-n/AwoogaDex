@@ -11,41 +11,34 @@ input {
     border: 1px solid black;
     border-right: none;
     border-radius: 0.5rem;
-    color: whitesmoke;
+    color: rgb(255, 255, 255);
 }
 
-button {
-    border: 1px solid black;
-    border-left: none;
-    padding: 0.5rem;
-    background-color: rgb(80, 50, 80);
-    border-radius: 0 0.5rem 0.5rem 0;
+input::placeholder,
+input::-ms-input-placeholder {
+    opacity: 0.7;
 }
-
 
 /* Classes */
 .init-container {
     display: flex;
+    flex-direction: column;
     width: 100vw;
-    height: 100vh;
+    height: 40vh;
     justify-content: center;
-}
-
-.manga-search-container {
-    display: flex;
-    height: 90vh;
     align-items: center;
 }
 
 .manga-submit {
-    display: flex;
-    flex-direction: row;
     -webkit-box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.57);
     box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.57);
 }
 
+.site-header-container {
+    margin-bottom: 5vh;
+}
+
 .site-header {
-    position: absolute;
     text-align: center;
 }
 
@@ -56,6 +49,41 @@ button {
 }
 
 #header-head {
-    font-size: 5vw;
+    font-size: 6rem;
     margin-bottom: 0;
 }
+
+#submit-button {
+    display: none;
+}
+
+
+/* Media Queries */
+
+/* For larger mobile devices (tablets) */
+@media(max-width: 1000px) {
+    /* General */
+
+
+    /* Classes */
+
+
+    /* IDs */
+    #manga-search {
+        width: 80vw;
+    }
+
+    #header-head {
+        font-size: 3rem;
+    }
+
+    #header-desc {
+        display: none;
+    }
+
+    #submit-button {
+        display: block;
+    }
+}
+
+/* For smaller mobile devices (phones) */
