@@ -40,10 +40,10 @@ function SearchManga() {
                 limit: 50,
                 title: mangaTitle,
                 contentRating: ["safe"]
-            }
+            },
         }).then(response => {
             let responseArr = response.data.results;
-            console.log(responseArr);
+            console.log(responseArr[3].data);
         }).catch(err => {
             console.error(err);
             setError(true);
