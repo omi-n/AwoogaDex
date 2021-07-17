@@ -27,7 +27,7 @@ function SearchManga() {
     const [error, setError] = useState(false);
     const [mangaArray, setMangaArray] = useState([]);
     const [searched, setSearched] = useState(false);
-    const limit = 50;
+    let limit = 25;
     // TODO: ADD A REQUEST ON MOUNT THAT QUERIES FOR A COUPLE EMPTY MANGAS TO FILL SPACE
     // TODO: ADD A FILTER BY TAG OPTION
     async function sendSearchRequest(e) {
@@ -83,12 +83,12 @@ function SearchManga() {
 
             for (let i = 0; i < responseArr.length; i++) {
                 mangas.push({
-                    title: responseArr[i].data.attributes.title.en,
+                    title: responseArr[i].data.attributes.title.en || "No Title Found.",
                     mangaID: responseArr[i].data.id,
                     coverLink: `https://cdn.discordapp.com/attachments/850613008782196776/866082390454829106/notfound.png`,
                     // authorID: responseArr[i].relationships[0].id, // leave for indiv pages
                     // artistID: responseArr[i].relationships[1].id, // leave for inviv pages
-                    description: responseArr[i].data.attributes.description.en.toString().substring(0, 300).concat("..."),
+                    description: responseArr[i].data.attributes.description.en.toString().substring(0, 400).concat("..."),
                 });
             }
 
@@ -97,6 +97,7 @@ function SearchManga() {
                     if (coverLinkArray[j].relationships[0].id === mangas[i].mangaID)
                         mangas[i].coverLink = `https://uploads.mangadex.org/covers/${mangas[i].mangaID}/${coverLinkArray[j].data.attributes.fileName}.512.jpg`;
                 }
+                if (mangas[i].description.length < 4) mangas[i].description = "No Description Found."
             }
             // console.log("response mangas: ", responseArr);
             // console.log("mangas: ", mangas)
