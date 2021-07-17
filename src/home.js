@@ -35,11 +35,11 @@ function SearchManga() {
             method: "GET",
             url: "https://api.mangadex.org/manga", // https://api.mangadex.org/manga
             params: {
-                limit: 50,
+                limit: 25,
                 title: mangaTitle,
                 contentRating: ["safe"]
             }
-        }).then(response => {
+        }).then(async response => {
             let responseArr = response.data.results;
             /* 
                 Structure of the response: 
@@ -55,18 +55,52 @@ function SearchManga() {
                             description: Description
             */
             let mangas = [];
+            let coverIDArray = [];
+            let coverLinkArray = [];
+            for (let i = 0; i < responseArr.length; i++) {
+                coverIDArray.push(responseArr[i].relationships[2].id);
+            }
+            // console.log("cover ID array: ", coverIDArray)
+
+            await axios({
+                method: "GET",
+                url: "https://api.mangadex.org/cover",
+                params: {
+                    ids: coverIDArray,
+                    limit: 100
+                }
+            }).then(res => {
+                for (let i = 0; i < res.data.results.length; i++) {
+                    coverLinkArray.push(res.data.results[i])
+                }
+                console.log("cover link array: ", coverLinkArray)
+            }).catch(err => {
+                console.error("error in cover GET", err);
+                setError(true);
+            });
+
             for (let i = 0; i < responseArr.length; i++) {
                 mangas.push({
                     title: responseArr[i].data.attributes.title.en,
-                    authorID: responseArr[i].relationships[0].id,
-                    artistID: responseArr[i].relationships[1].id,
+                    mangaID: responseArr[i].data.id,
+                    coverLink: 'notFound',
+                    // authorID: responseArr[i].relationships[0].id, // leave for indiv pages
+                    // artistID: responseArr[i].relationships[1].id, // leave for inviv pages
                     description: responseArr[i].data.attributes.description.en.toString().substring(0, 300).concat("..."),
-                    coverArtID: responseArr[i].relationships[2].id
                 });
             }
+
+            for (let i = 0; i < mangas.length; i++) {
+                for (let j = 0; j < coverLinkArray.length; j++) {
+                    if (coverLinkArray[j].relationships[0].id === mangas[i].mangaID)
+                        mangas[i].coverLink = `https://uploads.mangadex.org/covers/${mangas[i].mangaID}/${coverLinkArray[j].data.attributes.fileName}`;
+                }
+            }
+            // console.log("response mangas: ", responseArr);
+            console.log("mangas: ", mangas)
             setMangaArray(mangas);
         }).catch(err => {
-            console.error(err);
+            console.error("error in manga list GET: ", err);
             setError(true);
         });
     }
@@ -104,18 +138,14 @@ function MangaList(props) {
 function MangaCard(props) {
     let {
         title,
-        authorID,
-        artistID,
         description,
-        coverArtID
+        coverLink
     } = props.manga;
     return (
         <div className="manga-card">
             <p>{title}</p>
             <p>{description}</p>
-            {/* <p>Author ID: {authorID}</p>
-            <p>Artist ID: {artistID}</p>
-            <p>Cover Art ID: {coverArtID}</p> */}
+            <img src={coverLink} alt="cover image"></img>
         </div>
     )
 }
