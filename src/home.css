@@ -23,7 +23,8 @@ input::-ms-input-placeholder {
 .init-container {
     display: flex;
     flex-direction: column;
-    width: 100vw;
+    left: 0;
+    right: 0;
     justify-content: center;
     align-items: center;
 }
@@ -31,6 +32,10 @@ input::-ms-input-placeholder {
 .manga-submit {
     -webkit-box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.57);
     box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.57);
+}
+
+.manga-search-container {
+    margin-bottom: 3rem;
 }
 
 .site-header-container {
@@ -44,6 +49,28 @@ input::-ms-input-placeholder {
 .submit-error {
     text-align: center;
     margin: auto;
+}
+
+.manga-card {
+    display: flex;
+    max-width: 50vw;
+    border: 1px solid black;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    -webkit-box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.57);
+    box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.57);
+}
+
+.manga-text-info {
+    padding: 1rem;
+    border-left: 2px solid black;
+}
+
+.manga-img {
+    max-height: 20vh;
+    align-self: center;
+    padding: 1rem;
+    padding-right: 1rem;
 }
 
 
@@ -70,7 +97,10 @@ input::-ms-input-placeholder {
 
 
     /* Classes */
-
+    .manga-card {
+        display: flex;
+        max-width: 85vw;
+    }
 
     /* IDs */
     #manga-search {

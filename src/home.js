@@ -26,6 +26,8 @@ function SearchManga() {
     const [mangaTitle, setMangaTitle] = useState("");
     const [error, setError] = useState(false);
     const [mangaArray, setMangaArray] = useState([]);
+    const [searched, setSearched] = useState(false);
+    const limit = 50;
     // TODO: ADD A REQUEST ON MOUNT THAT QUERIES FOR A COUPLE EMPTY MANGAS TO FILL SPACE
     // TODO: ADD A FILTER BY TAG OPTION
     async function sendSearchRequest(e) {
@@ -35,11 +37,12 @@ function SearchManga() {
             method: "GET",
             url: "https://api.mangadex.org/manga", // https://api.mangadex.org/manga
             params: {
-                limit: 25,
+                limit: limit,
                 title: mangaTitle,
                 contentRating: ["safe"]
             }
         }).then(async response => {
+            setMangaArray([])
             let responseArr = response.data.results;
             /* 
                 Structure of the response: 
@@ -67,13 +70,12 @@ function SearchManga() {
                 url: "https://api.mangadex.org/cover",
                 params: {
                     ids: coverIDArray,
-                    limit: 100
+                    limit: limit
                 }
             }).then(res => {
                 for (let i = 0; i < res.data.results.length; i++) {
                     coverLinkArray.push(res.data.results[i])
                 }
-                console.log("cover link array: ", coverLinkArray)
             }).catch(err => {
                 console.error("error in cover GET", err);
                 setError(true);
@@ -83,7 +85,7 @@ function SearchManga() {
                 mangas.push({
                     title: responseArr[i].data.attributes.title.en,
                     mangaID: responseArr[i].data.id,
-                    coverLink: 'notFound',
+                    coverLink: `https://cdn.discordapp.com/attachments/850613008782196776/866082390454829106/notfound.png`,
                     // authorID: responseArr[i].relationships[0].id, // leave for indiv pages
                     // artistID: responseArr[i].relationships[1].id, // leave for inviv pages
                     description: responseArr[i].data.attributes.description.en.toString().substring(0, 300).concat("..."),
@@ -93,12 +95,13 @@ function SearchManga() {
             for (let i = 0; i < mangas.length; i++) {
                 for (let j = 0; j < coverLinkArray.length; j++) {
                     if (coverLinkArray[j].relationships[0].id === mangas[i].mangaID)
-                        mangas[i].coverLink = `https://uploads.mangadex.org/covers/${mangas[i].mangaID}/${coverLinkArray[j].data.attributes.fileName}.256.jpg`;
+                        mangas[i].coverLink = `https://uploads.mangadex.org/covers/${mangas[i].mangaID}/${coverLinkArray[j].data.attributes.fileName}.512.jpg`;
                 }
             }
             // console.log("response mangas: ", responseArr);
-            console.log("mangas: ", mangas)
+            // console.log("mangas: ", mangas)
             setMangaArray(mangas);
+            setSearched(true);
         }).catch(err => {
             console.error("error in manga list GET: ", err);
             setError(true);
@@ -118,21 +121,18 @@ function SearchManga() {
             </form>
         </div>
 
-        <div className="search-results">
-            <MangaList mangaArray={mangaArray} />
-            {error ? <p className="submit-error">An error has ocurred! Check console for more details. <button onClick={clearError}><strong>Clear</strong></button></p> : <></>}
-        </div>
+        <MangaList mangaArray={mangaArray} searched={searched} />
+        {error ? <p className="submit-error">An error has ocurred! Check console for more details. <button onClick={clearError}><strong>Clear</strong></button></p> : <></>}
     </>)
 }
 
 function MangaList(props) {
+    const searched = props.searched;
     const mangas = props.mangaArray;
-    // console.log(mangas);
-    return (
-        <ul>
-            {mangas && mangas.map(manga => <MangaCard key={manga.title} manga={manga} />)}
-        </ul>
-    )
+    console.log(mangas, searched);
+    return (<>
+        {((searched === true) && (mangas.length <= 0)) ? <p>Nothing found. Try a different title?</p> : mangas.map(manga => <MangaCard key={manga.title} manga={manga} />)}
+    </>)
 }
 
 function MangaCard(props) {
@@ -143,9 +143,11 @@ function MangaCard(props) {
     } = props.manga;
     return (
         <div className="manga-card">
-            <p>{title}</p>
-            <p>{description}</p>
-            <img src={coverLink} alt="cover image"></img>
+            <img className="manga-img" src={coverLink} alt="cover"></img>
+            <div className="manga-text-info">
+                <p className="manga-title"><strong>{title}</strong></p>
+                <p className="manga-desc">{description}</p>
+            </div>
         </div>
     )
 }
