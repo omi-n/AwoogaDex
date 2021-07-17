@@ -24,7 +24,6 @@ input::-ms-input-placeholder {
     display: flex;
     flex-direction: column;
     width: 100vw;
-    height: 40vh;
     justify-content: center;
     align-items: center;
 }
@@ -35,11 +34,16 @@ input::-ms-input-placeholder {
 }
 
 .site-header-container {
-    margin-bottom: 5vh;
+    margin-bottom: 6vh;
 }
 
 .site-header {
     text-align: center;
+}
+
+.submit-error {
+    text-align: center;
+    margin: auto;
 }
 
 
@@ -75,6 +79,7 @@ input::-ms-input-placeholder {
 
     #header-head {
         font-size: 3rem;
+        margin-top: 7vh;
     }
 
     #header-desc {
