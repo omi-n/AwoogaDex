@@ -26,6 +26,8 @@ function SearchManga() {
     const [mangaTitle, setMangaTitle] = useState("");
     const [error, setError] = useState(false);
     const [mangaArray, setMangaArray] = useState([]);
+    const mangaBaseURL = "https://api.mangadex.org/manga";
+    const coverBaseURL = "https://api.mangadex.org/cover";
 
     // TODO: ADD A FILTER BY TAG OPTION
 
@@ -34,11 +36,12 @@ function SearchManga() {
         /**
          * Sends a request to the MangaDex API and puts manga info into an array.
          * @param {number} limit - limit of the amount of mangas to get
+         * @param {number} imgsize - either 512 or 256. width of image
          */
-        async function loadMangas(limit = 10) {
+        async function loadMangas(limit = 10, imgsize = 256) {
             await axios({
                 method: "GET",
-                url: "https://api.mangadex.org/manga", // https://api.mangadex.org/manga
+                url: mangaBaseURL, // https://api.mangadex.org/manga
                 params: {
                     limit: limit,
                     title: mangaTitle,
@@ -70,7 +73,7 @@ function SearchManga() {
 
                 await axios({
                     method: "GET",
-                    url: "https://api.mangadex.org/cover",
+                    url: coverBaseURL,
                     params: {
                         ids: coverIDArray,
                         limit: limit
@@ -98,7 +101,7 @@ function SearchManga() {
                 for (let i = 0; i < mangas.length; i++) {
                     for (let j = 0; j < coverLinkArray.length; j++) {
                         if (coverLinkArray[j].relationships[0].id === mangas[i].mangaID)
-                            mangas[i].coverLink = `https://uploads.mangadex.org/covers/${mangas[i].mangaID}/${coverLinkArray[j].data.attributes.fileName}.512.jpg`;
+                            mangas[i].coverLink = `https://uploads.mangadex.org/covers/${mangas[i].mangaID}/${coverLinkArray[j].data.attributes.fileName}.${imgsize}.jpg`;
                     }
                     if (mangas[i].description.length < 4) mangas[i].description = "No Description Found."
                 }
@@ -111,15 +114,16 @@ function SearchManga() {
             });
         }
         loadMangas();
-    }, [mangaTitle]);
+        // if you want it to update as you type, fill in mangatitle here
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-
-    async function sendSearchRequest(e, limit = 25) {
+    async function sendSearchRequest(e, limit = 25, imgsize = 256) {
         e.preventDefault();
 
         await axios({
             method: "GET",
-            url: "https://api.mangadex.org/manga", // https://api.mangadex.org/manga
+            url: mangaBaseURL, // https://api.mangadex.org/manga
             params: {
                 limit: limit,
                 title: mangaTitle,
@@ -151,7 +155,7 @@ function SearchManga() {
 
             await axios({
                 method: "GET",
-                url: "https://api.mangadex.org/cover",
+                url: coverBaseURL,
                 params: {
                     ids: coverIDArray,
                     limit: limit
@@ -179,7 +183,7 @@ function SearchManga() {
             for (let i = 0; i < mangas.length; i++) {
                 for (let j = 0; j < coverLinkArray.length; j++) {
                     if (coverLinkArray[j].relationships[0].id === mangas[i].mangaID)
-                        mangas[i].coverLink = `https://uploads.mangadex.org/covers/${mangas[i].mangaID}/${coverLinkArray[j].data.attributes.fileName}.512.jpg`;
+                        mangas[i].coverLink = `https://uploads.mangadex.org/covers/${mangas[i].mangaID}/${coverLinkArray[j].data.attributes.fileName}.${imgsize}.jpg`;
                 }
                 if (mangas[i].description.length < 4) mangas[i].description = "No Description Found."
             }
@@ -199,12 +203,12 @@ function SearchManga() {
     return (<>
         <div className="manga-search-container">
             <form onSubmit={sendSearchRequest}>
-                <input className="manga-submit" type="text" value={mangaTitle} onChange={(e) => setMangaTitle(e.target.value)} id="manga-search" placeholder="Search By Title!" />
-                {/* TODO: ADD SEARCH BUTTON TO MOBILE ONLY */}
-                {/* <button type="submit" id="submit">asd</button> */}
+                <input className="manga-submit" type="text" value={mangaTitle} onChange={(e) => {
+                    setMangaTitle(e.target.value);
+                }} id="manga-search" placeholder="Search By Title!" />
             </form>
         </div>
-
+        {/* TODO: ADD NEXT 25 and PREVIOUS 25 BUTTONS! */}
         <MangaList mangaArray={mangaArray} />
         {error ? <p className="submit-error">An error has ocurred! Check console for more details. <button onClick={clearError}><strong>Clear</strong></button></p> : <></>}
     </>)
