@@ -24,23 +24,36 @@ function SiteHeader() {
 
 function SearchManga() {
     const [mangaTitle, setMangaTitle] = useState("");
+    const [error, setError] = useState(false);
+    let mangaArray = [];
     // TODO: ADD A REQUEST ON MOUNT THAT QUERIES FOR A COUPLE EMPTY MANGAS TO FILL SPACE
+    // TODO: ADD A FILTER BY TAG OPTION
 
+    const order = {
+        updatedAt: 'asc'
+    };
     async function sendSearchRequest(e) {
         e.preventDefault();
 
-        const response = await axios.get(`https://api.mangadex.org/manga`, {
+        await axios.get('https://api.mangadex.org/manga', {
             params: {
                 limit: 50,
                 title: mangaTitle,
                 contentRating: ["safe"]
             }
+        }).then(response => {
+            let responseArr = response.data.results;
+            console.log(responseArr);
         }).catch(err => {
             console.error(err);
+            setError(true);
         });
-
-        console.log(response.data.results);
     }
+
+    function clearError() {
+        setError(false);
+    }
+
     return (
         <div className="manga-search-container">
             <form onSubmit={sendSearchRequest}>
@@ -48,7 +61,7 @@ function SearchManga() {
                 {/* TODO: ADD SEARCH BUTTON TO MOBILE ONLY */}
                 {/* <button type="submit" id="submit">asd</button> */}
             </form>
-            <p>{mangaTitle}</p>
+            {error ? <p>An error has ocurred! Check console for more details. <button onClick={clearError}><strong>Clear</strong></button></p> : <></>}
         </div>
     )
 }
