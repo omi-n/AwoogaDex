@@ -1,0 +1,38 @@
+/* Classes */
+
+hr {
+    height: 0px;
+    background-color: whitesmoke;
+    border: none;
+}
+
+.manga-info {
+    display: flex;
+    flex-direction: row;
+    max-width: 80vw;
+    padding: 2rem;
+    border: 1px solid black;
+    margin: auto;
+    margin-top: 3rem;
+    -webkit-box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.57);
+    box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.57);
+    background-color: rgb(60, 37.5, 60);
+    border-radius: 0.5rem;
+}
+
+.manga-info-text {
+    margin: 2rem;
+    margin-bottom: 0;
+}
+
+.manga-info-image {
+    border: 1px solid black;
+    -webkit-box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.3);
+}
+
+.manga-tags {
+    display: grid;
+    grid-template-areas:
+        "a a a a";
+}
