@@ -1,5 +1,6 @@
 import "./home.css";
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 const axios = require("axios");
 
 export default function Home() {
@@ -16,7 +17,7 @@ function SiteHeader() {
         <div className="site-header-container">
             <div className="site-header">
                 <h1 id="header-head">AwoogaDex</h1>
-                <p id="header-desc">Get rid of all the excess features.</p>
+                <p id="header-desc">Can someone PLEASE tell me who joe is.</p>
             </div>
         </div>
     )
@@ -217,7 +218,7 @@ function SearchManga() {
 function MangaList(props) {
     const mangas = props.mangaArray;
     return (<>
-        {mangas.map(manga => <MangaCard key={manga.title} manga={manga} />)}
+        {(mangas.length > 0) ? mangas.map(manga => <MangaCard key={manga.title} manga={manga} />) : <p className="submit-error">Nothing found. Try another title?</p>}
     </>)
 }
 
@@ -228,12 +229,11 @@ function MangaCard(props) {
         mangaID,
         coverLink
     } = props.manga;
-    let mangaPage = `/${mangaID}`;
     return (
         <div className="manga-card">
             <img className="manga-img" src={coverLink} alt="cover"></img>
             <div className="manga-text-info">
-                <a href={mangaPage} className="manga-title"><strong>{title}</strong></a>
+                <Link className="manga-title" to={`/${mangaID}`}><strong>{title}</strong></Link>
                 <p className="manga-desc">{description}</p>
             </div>
         </div>
