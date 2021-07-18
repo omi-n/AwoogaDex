@@ -28,6 +28,7 @@ function SearchManga() {
     const [mangaTitle, setMangaTitle] = useState("");
     const [error, setError] = useState(false);
     const [mangaArray, setMangaArray] = useState([]);
+    const [offset, setOffset] = useState(0);
     const baseURL = 'https://wandering-sound-dad3.nabilomi.workers.dev/';
     const mangaBaseURL = `${baseURL}/manga`; // "https://api.mangadex.org/manga"
     const coverBaseURL = `${baseURL}/cover`; // "https://api.mangadex.org/cover"
@@ -36,19 +37,15 @@ function SearchManga() {
 
     /* Load some mangas as an example to the site */
     useEffect(() => {
-        /**
-         * Sends a request to the MangaDex API and puts manga info into an array.
-         * @param {number} limit - limit of the amount of mangas to get
-         * @param {number} imgsize - either 512 or 256. width of image
-         */
-        async function loadMangas(limit = 10, imgsize = 256) {
+        async function loadMangas(limit = 25, imgsize = 256, offset = 0) {
             await axios({
                 method: "GET",
                 url: mangaBaseURL, // https://api.mangadex.org/manga
                 params: {
                     limit: limit,
                     title: mangaTitle,
-                    contentRating: ["safe"]
+                    contentRating: ["safe"],
+                    offset: offset
                 }
             }).then(async response => {
                 setMangaArray([])
@@ -116,10 +113,10 @@ function SearchManga() {
                 setError(true);
             });
         }
-        loadMangas();
+        loadMangas(10, 256, offset);
         // if you want it to update as you type, fill in mangatitle here
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [offset]);
 
     async function sendSearchRequest(e, limit = 25, imgsize = 256) {
         e.preventDefault();
@@ -203,6 +200,17 @@ function SearchManga() {
         setError(false);
     }
 
+    function incrementOffset() {
+        setOffset(offset + 25);
+    }
+
+    function decrementOffset() {
+        if (offset >= 25)
+            setOffset(offset - 25);
+        if (offset < 25)
+            return;
+    }
+
     return (<>
         <div className="manga-search-container">
             <form onSubmit={sendSearchRequest}>
@@ -211,8 +219,24 @@ function SearchManga() {
                 }} id="manga-search" placeholder="Search By Title!" />
             </form>
         </div>
-        {/* TODO: ADD NEXT 25 and PREVIOUS 25 BUTTONS! */}
+
+        <div className="offset-container">
+            <div className="offset-buttons-container">
+                <button className="offset" id="prev" onClick={decrementOffset}>&lt;</button>
+                <button className="offset" id="next" onClick={incrementOffset}>&gt;</button>
+            </div>
+            <p className="submit-error">Current: {offset} - {offset + 25}</p>
+        </div>
+
         <MangaList mangaArray={mangaArray} />
+
+        <div className="offset-container">
+            <p className="submit-error">Current: {offset} - {offset + 25}</p>
+            <div className="offset-buttons-container">
+                <button className="offset" id="prev" onClick={decrementOffset}>&lt;</button>
+                <button className="offset" id="next" onClick={incrementOffset}>&gt;</button>
+            </div>
+        </div>
         {error ? <p className="submit-error">An error has ocurred! Check console for more details. <button onClick={clearError}><strong>Clear</strong></button></p> : <></>}
     </>)
 }

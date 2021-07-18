@@ -19,6 +19,26 @@ input::-ms-input-placeholder {
     opacity: 0.7;
 }
 
+button {
+    padding: 0.6rem 1.5rem;
+    background-color: rgb(80, 50, 80);
+    border: 1px solid black;
+    border-radius: 0.5rem;
+    color: whitesmoke;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    -webkit-box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.4);
+    box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.4);
+}
+
+button:hover {
+    background-color: rgb(120, 75, 120);
+}
+
+button:active {
+    background-color: rgb(100, 67.5, 100);
+}
+
 /* Classes */
 .init-container {
     display: flex;
@@ -35,7 +55,7 @@ input::-ms-input-placeholder {
 }
 
 .manga-search-container {
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
 }
 
 .site-header-container {
@@ -76,6 +96,19 @@ input::-ms-input-placeholder {
     padding-right: 1rem;
 }
 
+.offset-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.offset-buttons-container {
+    display: flex;
+    flex-direction: row;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
 
 /* IDs */
 #manga-search {
@@ -89,6 +122,14 @@ input::-ms-input-placeholder {
 
 #submit-button {
     display: none;
+}
+
+#prev {
+    margin-right: .5rem;
+}
+
+#next {
+    margin-left: .5rem;
 }
 
 

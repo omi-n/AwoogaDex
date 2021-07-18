@@ -21,9 +21,9 @@ export default function Manga({ match }) {
             params: {
                 manga: mangaID,
                 translatedLanguage: ['en'],
-                limit: 100,
+                limit: 50,
                 offset: offset,
-                "order[chapter]": "asc"
+                "order[chapter]": "desc"
             }
         }).then((response => {
             let resData = response.data.results;
@@ -40,7 +40,7 @@ export default function Manga({ match }) {
             console.log(chapterList);
         })).catch(err => console.error(err));
     }
-
+    // TODO: forwards button for offset
     return (
         <div>
             <p>{mangaID}</p>
