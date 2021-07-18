@@ -103,7 +103,7 @@ input::-ms-input-placeholder {
     .manga-card {
         display: flex;
         width: 85vw;
-        height: 35vh;
+        height: 30vh;
     }
 
     .manga-text-info {

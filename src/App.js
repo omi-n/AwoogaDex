@@ -2,7 +2,7 @@ import './App.css';
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 
 import Home from "./home";
-import Manga from "./manga";
+import Manga from "./mangaInfo";
 
 function App() {
   return (

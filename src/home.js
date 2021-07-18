@@ -2,6 +2,7 @@ import "./home.css";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 const axios = require("axios");
+require('dotenv').config();
 
 export default function Home() {
     return (
@@ -27,8 +28,9 @@ function SearchManga() {
     const [mangaTitle, setMangaTitle] = useState("");
     const [error, setError] = useState(false);
     const [mangaArray, setMangaArray] = useState([]);
-    const mangaBaseURL = "https://api.mangadex.org/manga";
-    const coverBaseURL = "https://api.mangadex.org/cover";
+    const baseURL = 'https://wandering-sound-dad3.nabilomi.workers.dev/';
+    const mangaBaseURL = `${baseURL}/manga`; // "https://api.mangadex.org/manga"
+    const coverBaseURL = `${baseURL}/cover`; // "https://api.mangadex.org/cover"
 
     // TODO: ADD A FILTER BY TAG OPTION
 
