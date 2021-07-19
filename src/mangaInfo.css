@@ -38,7 +38,7 @@ hr {
 }
 
 .tag {
-    width: 10rem;
+    width: 10vw;
     margin: .5rem;
     height: 3rem;
 }
@@ -140,5 +140,9 @@ hr {
         grid-template-areas:
             "a a";
         justify-content: center;
+    }
+
+    .tag {
+        width: 40vw;
     }
 }

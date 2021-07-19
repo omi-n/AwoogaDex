@@ -151,7 +151,7 @@ export default function Manga({ match }) {
 }
 
 function Chapter(props) {
-    const { chapter, chapterID } = props.chapter; // volume
+    const { chapter, chapterID } = props.chapter;
     return (
         <a className="chapter-container" href={`/chapter/${chapterID}`}>
             <p className="chapter">Chapter {chapter}</p>
