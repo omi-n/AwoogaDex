@@ -85,7 +85,6 @@ function SearchManga() {
             });
         }
         loadMangas(25, 256, offset);
-        // if you want it to update as you type, fill in mangatitle here
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [offset, mangaTitle]);
 

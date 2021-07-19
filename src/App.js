@@ -3,6 +3,7 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 
 import Home from "./home";
 import Manga from "./mangaInfo";
+import MangaReader from "./mangaReader";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/manga/:id" component={Manga} />
+          <Route path="/chapter/:id" component={MangaReader} />
         </Switch>
       </BrowserRouter>
     </div>
