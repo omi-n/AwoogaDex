@@ -29,6 +29,7 @@ function SearchManga() {
     const [error, setError] = useState(false);
     const [mangaArray, setMangaArray] = useState([]);
     const [offset, setOffset] = useState(0);
+    const [totalManga, setTotalManga] = useState(0);
     const baseURL = 'https://wandering-sound-dad3.nabilomi.workers.dev/';
     const mangaBaseURL = `${baseURL}/manga?includes[]=cover_art`; // "https://api.mangadex.org/manga"
 
@@ -47,13 +48,13 @@ function SearchManga() {
                     offset: offset
                 }
             }).then(response => {
-                setMangaArray([])
+                setMangaArray([]);
+                setTotalManga(response.data.total);
                 let responseArr = response.data.results;
-                console.log(responseArr)
-                let coverFoundStatus = false;
                 let coverIdx;
                 let mangas = [];
                 for (let i = 0; i < responseArr.length; i++) {
+                    let coverFoundStatus = false;
                     for (let j = 0; j < responseArr[i].relationships.length; j++) {
                         if (responseArr[i].relationships[j].type === "cover_art") {
                             coverIdx = j;
@@ -61,7 +62,9 @@ function SearchManga() {
                         }
                     }
                     let mangaID = responseArr[i].data.id;
-                    let coverFileName = responseArr[i].relationships[coverIdx].attributes.fileName;
+                    let coverFileName;
+                    if(coverFoundStatus)
+                        coverFileName = responseArr[i].relationships[coverIdx].attributes.fileName;
                     mangas.push({
                         title: responseArr[i].data.attributes.title.en || "No Title Found.",
                         mangaID: responseArr[i].data.id,
@@ -138,7 +141,11 @@ function SearchManga() {
     }
 
     function incrementOffset() {
-        setOffset(offset + 25);
+        let nearestOffsetMax = Math.ceil(totalManga / 25) * 25;
+        if(offset === nearestOffsetMax - 25)
+            return;
+        else
+            setOffset(offset + 25);
     }
 
     function decrementOffset() {
@@ -148,11 +155,16 @@ function SearchManga() {
             return;
     }
 
+    function resetOffset() {
+        setOffset(0);
+    }
+
     return (<>
         <div className="manga-search-container">
             {/* <form onSubmit={sendSearchRequest}> */}
             <input className="manga-submit" type="text" value={mangaTitle} onChange={(e) => {
                 setMangaTitle(e.target.value);
+                setOffset(0);
             }} id="manga-search" placeholder="Search By Title!" />
             {/* </form> */}
         </div>
@@ -160,17 +172,19 @@ function SearchManga() {
         <div className="offset-container">
             <div className="offset-buttons-container">
                 <button className="offset" id="prev" onClick={decrementOffset}>&lt;</button>
+                <button className="offset" id="" onClick={resetOffset}>0</button>
                 <button className="offset" id="next" onClick={incrementOffset}>&gt;</button>
             </div>
-            <p className="submit-error">Current: {offset} - {offset + 25}</p>
+            <p className="submit-error">Current: {offset} to {offset + 25} / {totalManga}</p>
         </div>
 
         <MangaList mangaArray={mangaArray} />
 
         <div className="offset-container">
-            <p className="submit-error">Current: {offset} - {offset + 25}</p>
+            <p className="submit-error">Current: {offset} to {offset + 25} / {totalManga}</p>
             <div className="offset-buttons-container">
                 <button className="offset" id="prev" onClick={decrementOffset}>&lt;</button>
+                <button className="offset" id="" onClick={resetOffset}>0</button>
                 <button className="offset" id="next" onClick={incrementOffset}>&gt;</button>
             </div>
         </div>
@@ -181,7 +195,7 @@ function SearchManga() {
 function MangaList(props) {
     const mangas = props.mangaArray;
     return (<>
-        {(mangas.length > 0) ? mangas.map(manga => <MangaCard key={manga.title} manga={manga} />) : <p className="submit-error">Nothing found. Try another title?</p>}
+        {(mangas.length > 0) ? mangas.map(manga => <MangaCard key={manga.mangaID} manga={manga} />) : <p className="submit-error">Nothing found. Try another title?</p>}
     </>)
 }
 
