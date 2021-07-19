@@ -19,7 +19,7 @@ function SiteHeader() {
         <div className="site-header-container">
             <div className="site-header">
                 <h1 id="header-head">AwoogaDex</h1>
-                <p id="header-desc">Can someone PLEASE tell me who joe is.</p>
+                <p id="header-desc">Uses the <a href="https://api.mangadex.org/docs.html" target="_blank" rel="noreferrer">MangaDex API</a>.</p>
             </div>
         </div>
     )
@@ -31,6 +31,7 @@ function SearchManga() {
     const [mangaArray, setMangaArray] = useState([]);
     const [offset, setOffset] = useState(0);
     const [totalManga, setTotalManga] = useState(0);
+    const limit = 10;
     const mangaBaseURL = `${baseURL}/manga?includes[]=cover_art`; // "https://api.mangadex.org/manga"
 
     // TODO: ADD A FILTER BY TAG OPTION
@@ -53,25 +54,25 @@ function SearchManga() {
                 let responseArr = response.data.results;
                 let coverIdx;
                 let mangas = [];
-                for (let i = 0; i < responseArr.length; i++) {
+                responseArr.forEach(response => {
                     let coverFoundStatus = false;
-                    for (let j = 0; j < responseArr[i].relationships.length; j++) {
-                        if (responseArr[i].relationships[j].type === "cover_art") {
+                    for (let j = 0; j < response.relationships.length; j++) {
+                        if (response.relationships[j].type === "cover_art") {
                             coverIdx = j;
                             coverFoundStatus = true;
                         }
                     }
-                    let mangaID = responseArr[i].data.id;
+                    let mangaID = response.data.id;
                     let coverFileName;
                     if(coverFoundStatus)
-                        coverFileName = responseArr[i].relationships[coverIdx].attributes.fileName;
+                        coverFileName = response.relationships[coverIdx].attributes.fileName;
                     mangas.push({
-                        title: responseArr[i].data.attributes.title.en || "No Title Found.",
-                        mangaID: responseArr[i].data.id,
+                        title: response.data.attributes.title.en || "No Title Found.",
+                        mangaID: response.data.id,
                         coverLink: (coverFoundStatus ? `https://uploads.mangadex.org/covers/${mangaID}/${coverFileName}.${imgsize}.jpg` : `https://cdn.discordapp.com/attachments/850613008782196776/866082390454829106/notfound.png`),
-                        description: responseArr[i].data.attributes.description.en.toString().substring(0, 400).concat("..."),
+                        description: response.data.attributes.description.en.toString().substring(0, 400).concat("..."),
                     });
-                }
+                });
 
                 mangas.forEach(manga => {
                     if (manga.description.length < 4) manga.description = "No Description Found.";
@@ -84,7 +85,7 @@ function SearchManga() {
                 setError(true);
             });
         }
-        loadMangas(25, 256, offset);
+        loadMangas(limit, 256, offset);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [offset, mangaTitle]);
 
