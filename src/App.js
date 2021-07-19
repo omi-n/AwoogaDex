@@ -10,7 +10,7 @@ function App() {
       <BrowserRouter>
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route path="/:id" component={Manga} />
+          <Route path="/manga/:id" component={Manga} />
         </Switch>
       </BrowserRouter>
     </div>

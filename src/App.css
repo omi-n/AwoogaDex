@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
 :root {
-    background-color: rgb(40, 25, 40);
+    background-color: rgb(20, 20, 20);
     padding: 0px;
     margin: 0px;
     scroll-behavior: smooth;
@@ -10,12 +10,6 @@
 
 #statuspanel {
     display: none !important;
-}
-
-a {
-    text-decoration: none;
-    color: white;
-    font-family: 'Poppins', sans-serif;
 }
 
 .App {
