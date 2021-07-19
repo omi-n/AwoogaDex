@@ -29,6 +29,7 @@ button {
     font-family: 'Poppins', sans-serif;
     -webkit-box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.3);
     box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.3);
+    transition: 0.2s;
 }
 
 button:hover {
@@ -37,6 +38,12 @@ button:hover {
 
 button:active {
     background-color: rgb(50, 50, 50);
+}
+
+a {
+    text-decoration: none;
+    color: white;
+    font-family: 'Poppins', sans-serif;
 }
 
 /* Classes */
@@ -77,29 +84,30 @@ button:active {
     border: 1px solid black;
     border-radius: 0.5rem;
     margin-bottom: 1rem;
+    padding: 1rem;
     -webkit-box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.57);
     box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.57);
     background-color: rgb(30, 30, 30);
+    align-items: center;
+    transition: 0.2s;
 }
 
 .manga-text-info {
     display: inline;
     padding: 1rem;
-    padding-top: 1.5rem;
-    border-left: 2px solid black;
+    opacity: 1;
 }
 
 .manga-title {
     text-decoration: none;
     color: white;
     font-family: 'Poppins', sans-serif;
+    opacity: 1;
 }
 
 .manga-img {
-    max-height: 20vh;
-    align-self: center;
+    height: 20vh;
     padding: 1rem;
-    padding-right: 1rem;
 }
 
 .offset-container {
@@ -114,6 +122,10 @@ button:active {
     display: flex;
     flex-direction: row;
     margin: 1rem;
+}
+
+.manga-status {
+    display: none;
 }
 
 /* IDs */
@@ -142,21 +154,36 @@ button:active {
 /* Media Queries */
 
 /* For larger mobile devices (tablets) */
-@media(max-width: 1000px) {
+@media(max-width: 800px) {
     /* General */
 
 
     /* Classes */
     .manga-card {
         display: flex;
+        flex-direction: column-reverse;
         width: 85vw;
-        height: 30vh;
+        padding-bottom: 1rem;
+        padding-top: 0rem;
+    }
+
+    .manga-desc {
+        display: none;
+    }
+
+    .manga-status {
+        display: block;
+    }
+
+    .manga-img {
+        height: 40vh;
     }
 
     .manga-text-info {
-        border-left: 2px solid black;
-        overflow-y: scroll;
+        display: inline;
+        padding-bottom: 0;
     }
+
 
     /* IDs */
     #manga-search {

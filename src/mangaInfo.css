@@ -38,7 +38,7 @@ hr {
 }
 
 .tag {
-    max-width: 10rem;
+    width: 10rem;
     margin: .5rem;
     height: 3rem;
 }

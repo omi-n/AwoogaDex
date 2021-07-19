@@ -206,13 +206,15 @@ function MangaCard(props) {
         coverLink
     } = props.manga;
     return (
-        <div className="manga-card">
-            <Link to={`/manga/${mangaID}`}><img className="manga-img" src={coverLink} alt="cover" /></Link>
-            <div className="manga-text-info">
-                <Link className="manga-title" to={`/manga/${mangaID}`}><strong>{title}</strong></Link>
-                <p className="manga-desc">{description}</p>
-            </div>
-        </div>
+        <Link to={`/manga/${mangaID}`}>
+            <button className="manga-card">
+                <img className="manga-img" src={coverLink} alt="cover" />
+                <div className="manga-text-info">
+                    <p className="manga-title" to={`/manga/${mangaID}`}><strong>{title}</strong></p>
+                    <p className="manga-desc">{description}</p>
+                </div>
+            </button>
+        </Link>
     )
 }
 
