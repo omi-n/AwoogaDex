@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 const axios = require("axios");
 require('dotenv').config();
+const baseURL = 'https://wandering-sound-dad3.nabilomi.workers.dev/';
 
 export default function Home() {
     return (
@@ -30,7 +31,6 @@ function SearchManga() {
     const [mangaArray, setMangaArray] = useState([]);
     const [offset, setOffset] = useState(0);
     const [totalManga, setTotalManga] = useState(0);
-    const baseURL = 'https://wandering-sound-dad3.nabilomi.workers.dev/';
     const mangaBaseURL = `${baseURL}/manga?includes[]=cover_art`; // "https://api.mangadex.org/manga"
 
     // TODO: ADD A FILTER BY TAG OPTION
@@ -172,19 +172,19 @@ function SearchManga() {
         <div className="offset-container">
             <div className="offset-buttons-container">
                 <button className="offset" id="prev" onClick={decrementOffset}>&lt;</button>
-                <button className="offset" id="" onClick={resetOffset}>0</button>
+                <button className="offset" id="" onClick={resetOffset}>1</button>
                 <button className="offset" id="next" onClick={incrementOffset}>&gt;</button>
             </div>
-            <p className="submit-error">Current: {offset} to {offset + 25} / {totalManga}</p>
+            <p className="submit-error">Page: {(offset + 25) / 25} / {Math.ceil(totalManga / 25)}</p>
         </div>
 
         <MangaList mangaArray={mangaArray} />
 
         <div className="offset-container">
-            <p className="submit-error">Current: {offset} to {offset + 25} / {totalManga}</p>
+            <p className="submit-error">Page: {(offset + 25) / 25} / {Math.ceil(totalManga / 25)}</p>
             <div className="offset-buttons-container">
                 <button className="offset" id="prev" onClick={decrementOffset}>&lt;</button>
-                <button className="offset" id="" onClick={resetOffset}>0</button>
+                <button className="offset" id="" onClick={resetOffset}>1</button>
                 <button className="offset" id="next" onClick={incrementOffset}>&gt;</button>
             </div>
         </div>
@@ -208,9 +208,9 @@ function MangaCard(props) {
     } = props.manga;
     return (
         <div className="manga-card">
-            <img className="manga-img" src={coverLink} alt="cover"></img>
+            <Link to={`/manga/${mangaID}`}><img className="manga-img" src={coverLink} alt="cover" /></Link>
             <div className="manga-text-info">
-                <Link className="manga-title" to={`/${mangaID}`}><strong>{title}</strong></Link>
+                <Link className="manga-title" to={`/manga/${mangaID}`}><strong>{title}</strong></Link>
                 <p className="manga-desc">{description}</p>
             </div>
         </div>

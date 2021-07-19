@@ -1,16 +1,17 @@
 import "./mangaInfo.css";
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import bbobReactRender from '@bbob/react/es/render';
 import presetReact from '@bbob/preset-react';
 const axios = require("axios");
+const baseURL = 'https://wandering-sound-dad3.nabilomi.workers.dev/';
 
 export default function Manga({ match }) {
     let mangaID = match.params.id;
     const [chapterList, setChapterList] = useState([]);
     const [mangaInfo, setMangaInfo] = useState({});
+    const [totalChapters, setTotalChapters] = useState(0);
     const [offset, setOffset] = useState(0);
-    const baseURL = 'https://wandering-sound-dad3.nabilomi.workers.dev/'
+    const limit = 24;
 
     useEffect(() => {
         async function getMangaInfo(mangaID) {
@@ -30,8 +31,10 @@ export default function Manga({ match }) {
                     coverIdx = i;
                 }
                 let coverFileName = resData.relationships[coverIdx].attributes.fileName;
-                const options = { enableEscapeTags: true, }
-                let description = bbobReactRender(`${resData.data.attributes.description.en}`, presetReact(), options)
+                const options = { enableEscapeTags: true }
+                // SHUT UP SHUT UP SHUT UP
+                // eslint-disable-next-line react-hooks/exhaustive-deps
+                let description = bbobReactRender(`${resData.data.attributes.description.en}`, presetReact(), options);
                 let usefulMangaInfo = {
                     title: resData.data.attributes.title.en,
                     description: description,
@@ -60,16 +63,17 @@ export default function Manga({ match }) {
             let engChap = [];
             await axios({
                 method: "GET",
-                url: `${baseURL}/chapter`,
+                url: `${baseURL}/chapter`, //
                 params: {
                     manga: mangaID,
                     translatedLanguage: ['en'],
-                    limit: 50,
+                    limit: limit,
                     offset: offset,
-                    "order[chapter]": "desc"
+                    "order[chapter]": "asc"
                 }
             }).then((response => {
                 let resData = response.data.results;
+                setTotalChapters(response.data.total);
                 for (let i = 0; i < resData.length; i++) {
                     engChap.push({
                         chapter: resData[i].data.attributes.chapter,
@@ -87,9 +91,29 @@ export default function Manga({ match }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [mangaID, offset]);
 
+    function incrementOffset() {
+        let nearestOffsetMax = Math.ceil(totalChapters / limit) * limit;
+        if (offset === nearestOffsetMax - limit)
+            return;
+        else
+            setOffset(offset + limit);
+    }
+
+    function decrementOffset() {
+        if (offset >= limit)
+            setOffset(offset - limit);
+        if (offset < limit)
+            return;
+    }
+
+    function resetOffset() {
+        setOffset(0);
+    }
+
     // TODO: forwards button for offset
     return (
         <div className="all-content">
+            <BackToHome />
             <div className="manga-info">
                 <img className="manga-info-image" src={mangaInfo.cover} alt="cover" />
                 <div className="manga-info-text">
@@ -100,10 +124,20 @@ export default function Manga({ match }) {
                     <p className="artists"><strong>Artist(s):</strong> {mangaInfo.artists ? mangaInfo.artists.map(artist => `${artist}`) : <p>Artists Not Found.</p>}</p>
                     <p><br /><strong>Tags:</strong></p>
                     <div className="manga-tags">
-                        {mangaInfo.tags && mangaInfo.tags.map(tag => <p key={tag}>{tag}</p>)}
+                        {mangaInfo.tags && mangaInfo.tags.map(tag => <button className="tag" key={tag}>{tag}</button>)}
                     </div>
                 </div>
             </div>
+
+            <div className="chapter-offset-container">
+                <div className="chapter-offset-buttons-container">
+                    <button className="offset" id="prev" onClick={decrementOffset}>&lt;</button>
+                    <button className="offset" id="" onClick={resetOffset}>1</button>
+                    <button className="offset" id="next" onClick={incrementOffset}>&gt;</button>
+                </div>
+                <p className="submit-error">Page: {(offset + limit) / limit} / {Math.ceil(totalChapters / limit)}</p>
+            </div>
+
             <div className="chapter-list">
                 {chapterList.length > 0 ? chapterList.map(chapter => <Chapter key={chapter.id} chapter={chapter} />) : <p className="chapter-error">No Further Chapters in the MangaDex API.</p>}
             </div>
@@ -112,10 +146,18 @@ export default function Manga({ match }) {
 }
 
 function Chapter(props) {
-    const { chapter, volume, id } = props.chapter;
+    const { chapter, id } = props.chapter; // volume
     return (
-        <div>
-            <Link to={`/${id}`}>Volume {volume ? volume : "?"}, Chapter {chapter}</Link>
+        <a className="chapter-container" href={`/chapter/${id}`}>
+            <p className="chapter">Chapter {chapter}</p>
+        </a>
+    )
+}
+
+function BackToHome() {
+    return (
+        <div className="home-btn">
+            <a className="home-btn-link" href="/"><button>Home</button></a>
         </div>
     )
 }
