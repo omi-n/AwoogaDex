@@ -77,8 +77,7 @@ export default function Manga({ match }) {
                 for (let i = 0; i < resData.length; i++) {
                     engChap.push({
                         chapter: resData[i].data.attributes.chapter,
-                        volume: resData[i].data.attributes.volume,
-                        id: resData[i].data.id
+                        chapterID: resData[i].data.id
                         // images: resData[i].data.attributes.data,
                         // chapterHash: resData[i].data.attributes.hash
                     });
@@ -146,9 +145,9 @@ export default function Manga({ match }) {
 }
 
 function Chapter(props) {
-    const { chapter, id } = props.chapter; // volume
+    const { chapter, chapterID } = props.chapter; // volume
     return (
-        <a className="chapter-container" href={`/chapter/${id}`}>
+        <a className="chapter-container" href={`/chapter/${chapterID}`}>
             <p className="chapter">Chapter {chapter}</p>
         </a>
     )

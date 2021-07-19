@@ -12,7 +12,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/manga/:id" component={Manga} />
-          <Route path="/chapter/:id" component={MangaReader} />
+          <Route path="/chapter/:chapterid" component={MangaReader} />
         </Switch>
       </BrowserRouter>
     </div>
