@@ -6,7 +6,7 @@ const axios = require("axios");
 const baseURL = 'https://wandering-sound-dad3.nabilomi.workers.dev/';
 
 export default function Manga({ match }) {
-    let mangaID = match.params.id;
+    const mangaID = match.params.id;
     const [chapterList, setChapterList] = useState([]);
     const [mangaInfo, setMangaInfo] = useState({});
     const [totalChapters, setTotalChapters] = useState(0);
@@ -22,7 +22,7 @@ export default function Manga({ match }) {
                     ids: [mangaID]
                 }
             }).then(response => {
-                let resData = response.data.results[0];
+                const resData = response.data.results[0];
                 let coverFoundStatus = false;
                 let coverIdx;
                 for (let i = 0; i < resData.relationships.length; i++) {
@@ -45,14 +45,14 @@ export default function Manga({ match }) {
                     artists: []
                 }
 
-                for (let i = 0; i < resData.data.attributes.tags.length; i++) {
-                    usefulMangaInfo.tags.push(resData.data.attributes.tags[i].attributes.name.en);
-                }
+                resData.data.attributes.tags.forEach(tag => {
+                    usefulMangaInfo.tags.push(tag.attributes.name.en);
+                });
 
-                for (let i = 0; i < resData.relationships.length; i++) {
-                    if (resData.relationships[i].type === "artist")
-                        usefulMangaInfo.artists.push(resData.relationships[i].attributes.name);
-                }
+                resData.relationships.forEach(relationship => {
+                    if (relationship.type === "artist")
+                        usefulMangaInfo.artists.push(relationship.attributes.name);
+                });
 
                 setMangaInfo(usefulMangaInfo);
             }).catch(err => {
@@ -72,16 +72,16 @@ export default function Manga({ match }) {
                     "order[chapter]": "asc"
                 }
             }).then((response => {
-                let resData = response.data.results;
+                const resData = response.data.results;
                 setTotalChapters(response.data.total);
-                for (let i = 0; i < resData.length; i++) {
+                resData.forEach(res => {
                     engChap.push({
-                        chapter: resData[i].data.attributes.chapter,
-                        chapterID: resData[i].data.id
+                        chapter: res.data.attributes.chapter,
+                        chapterID: res.data.id
                         // images: resData[i].data.attributes.data,
                         // chapterHash: resData[i].data.attributes.hash
                     });
-                }
+                });
                 setChapterList(engChap);
             })).catch(err => console.error(err));
         }
@@ -109,6 +109,11 @@ export default function Manga({ match }) {
         setOffset(0);
     }
 
+    function endingOffset() {
+        let maxOffset = Math.ceil(totalChapters / limit);
+        setOffset(maxOffset * limit - limit);
+    }
+
     // TODO: forwards button for offset
     return (
         <div className="all-content">
@@ -131,7 +136,8 @@ export default function Manga({ match }) {
             <div className="chapter-offset-container">
                 <div className="chapter-offset-buttons-container">
                     <button className="offset" id="prev" onClick={decrementOffset}>&lt;</button>
-                    <button className="offset" id="" onClick={resetOffset}>1</button>
+                    <button className="offset" id="start" onClick={resetOffset}>Start</button>
+                    <button className="offset" id="end" onClick={endingOffset}>End</button>
                     <button className="offset" id="next" onClick={incrementOffset}>&gt;</button>
                 </div>
                 <p className="submit-error">Page: {(offset + limit) / limit} / {Math.ceil(totalChapters / limit)}</p>

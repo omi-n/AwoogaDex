@@ -111,6 +111,10 @@ hr {
     font-family: 'Poppins', sans-serif;
 }
 
+#start {
+    margin-right: .5rem;
+}
+
 @media(max-width: 1300px) {
     .manga-info {
         padding: 1rem;

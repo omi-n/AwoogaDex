@@ -3,8 +3,10 @@ import React, { useState, useEffect } from "react";
 const axios = require("axios");
 
 export default function MangaReader({ match }) {
+    const [pageList, setPageList] = useState([]);
+    const [dataSaver, setDataSaver] = useState(false);
     const limit = 24;
-    let chapterID = match.params.chapterid;
+    const chapterID = match.params.chapterid;
     const baseURL = 'https://wandering-sound-dad3.nabilomi.workers.dev/';
     useEffect(() => {
         async function getChapter(chapterID) {

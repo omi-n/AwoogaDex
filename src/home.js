@@ -73,9 +73,9 @@ function SearchManga() {
                     });
                 }
 
-                for (let i = 0; i < mangas.length; i++) {
-                    if (mangas[i].description.length < 4) mangas[i].description = "No Description Found.";
-                }
+                mangas.forEach(manga => {
+                    if (manga.description.length < 4) manga.description = "No Description Found.";
+                });
                 // console.log("response mangas: ", responseArr);
                 // console.log("mangas: ", mangas)
                 setMangaArray(mangas);
