@@ -97,8 +97,8 @@ hr {
 
 .home-btn {
     position: fixed;
-    bottom: 0;
-    right: 0;
+    top: 0;
+    left: 0;
     margin: 1rem;
     border: 1px solid black;
     border-radius: .5rem;
@@ -131,6 +131,18 @@ hr {
 
     .chapter-container {
         width: 30vw;
+    }
+
+    .home-btn {
+        position: fixed;
+        top: unset;
+        left: unset;
+        bottom: 0;
+        right: 0;
+        margin: 1rem;
+        border: 1px solid black;
+        border-radius: .5rem;
+        background-color: rgb(50, 50, 50);
     }
 }
 

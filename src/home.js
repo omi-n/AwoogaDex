@@ -87,54 +87,52 @@ function SearchManga() {
         }
         loadMangas(limit, 256, offset);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [offset, mangaTitle]);
+    }, [offset]);
 
     /* RE ADD IF THE SITE IS RATE LIMITED HARD ON PRODUCTION */
-    // async function sendSearchRequest(e, limit = 25, imgsize = 256) {
-    //     e.preventDefault();
+    async function sendSearchRequest(e, limit = 25, imgsize = 256) {
+        e.preventDefault();
 
-    //     await axios({
-    //         method: "GET",
-    //         url: mangaBaseURL, // https://api.mangadex.org/manga
-    //         params: {
-    //             limit: limit,
-    //             title: mangaTitle,
-    //             contentRating: ["safe"]
-    //         }
-    //     }).then(async response => {
-    //         setMangaArray([])
-    //         let responseArr = response.data.results;
-    //         let coverFoundStatus = false;
-    //         let coverIdx;
-    //         /* 
+        await axios({
+            method: "GET",
+            url: mangaBaseURL, // https://api.mangadex.org/manga
+            params: {
+                limit: limit,
+                title: mangaTitle,
+                contentRating: ["safe"]
+            }
+        }).then(async response => {
+            setMangaArray([])
+            let responseArr = response.data.results;
+            let coverFoundStatus = false;
+            let coverIdx;
+            let mangas = [];
+            for (let i = 0; i < responseArr.length; i++) {
+                for (let j = 0; j < responseArr[i].relationships.length; j++) {
+                    if (responseArr[i].relationships[j].type === "cover_art") {
+                        coverIdx = j;
+                        coverFoundStatus = true;
+                    }
+                }
+                mangas.push({
+                    title: responseArr[i].data.attributes.title.en || "No Title Found.",
+                    mangaID: responseArr[i].data.id,
+                    coverLink: (coverFoundStatus ? `https://uploads.mangadex.org/covers/${responseArr[i].data.id}/${responseArr[i].relationships[coverIdx].attributes.fileName}.${imgsize}.jpg` : `https://cdn.discordapp.com/attachments/850613008782196776/866082390454829106/notfound.png`),
+                    description: responseArr[i].data.attributes.description.en.toString().substring(0, 400).concat("..."),
+                });
+            }
 
-    //         let mangas = [];
-    //         for (let i = 0; i < responseArr.length; i++) {
-    //             for (let j = 0; j < responseArr[i].relationships.length; j++) {
-    //                 if (responseArr[i].relationships[j].type === "cover_art") {
-    //                     coverIdx = j;
-    //                     coverFoundStatus = true;
-    //                 }
-    //             }
-    //             mangas.push({
-    //                 title: responseArr[i].data.attributes.title.en || "No Title Found.",
-    //                 mangaID: responseArr[i].data.id,
-    //                 coverLink: (coverFoundStatus ? `https://uploads.mangadex.org/covers/${responseArr[i].data.id}/${responseArr[i].relationships[coverIdx].attributes.fileName}.${imgsize}.jpg` : `https://cdn.discordapp.com/attachments/850613008782196776/866082390454829106/notfound.png`),
-    //                 description: responseArr[i].data.attributes.description.en.toString().substring(0, 400).concat("..."),
-    //             });
-    //         }
-
-    //         for (let i = 0; i < mangas.length; i++) {
-    //             if (mangas[i].description.length < 4) mangas[i].description = "No Description Found."
-    //         }
-    //         // console.log("response mangas: ", responseArr);
-    //         // console.log("mangas: ", mangas)
-    //         setMangaArray(mangas);
-    //     }).catch(err => {
-    //         console.error("error in manga list GET: ", err);
-    //         setError(true);
-    //     });
-    // }
+            for (let i = 0; i < mangas.length; i++) {
+                if (mangas[i].description.length < 4) mangas[i].description = "No Description Found."
+            }
+            // console.log("response mangas: ", responseArr);
+            // console.log("mangas: ", mangas)
+            setMangaArray(mangas);
+        }).catch(err => {
+            console.error("error in manga list GET: ", err);
+            setError(true);
+        });
+    }
 
     function clearError() {
         setError(false);
@@ -161,12 +159,12 @@ function SearchManga() {
 
     return (<>
         <div className="manga-search-container">
-            {/* <form onSubmit={sendSearchRequest}> */}
+            <form onSubmit={sendSearchRequest}>
             <input className="manga-submit" type="text" value={mangaTitle} onChange={(e) => {
                 setMangaTitle(e.target.value);
                 setOffset(0);
             }} id="manga-search" placeholder="Search By Title!" />
-            {/* </form> */}
+            </form>
         </div>
 
         <div className="offset-container">
