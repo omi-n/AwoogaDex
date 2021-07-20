@@ -11,7 +11,6 @@ export default function MangaReader(props) {
     // TODO: REWORK THE ENTIRE FETCHING PORTION OF THIS TO MAKE IT NON RELIANT ON PREVIOUS STATE
     const { match } = props;
     const { chapterID, chapterIndex, offset } = match.params;
-    console.log(match.params)
     const [chapterInfo, setChapterInfo] = useState({});
     let dataSaverStatus = false;
     const preloadStatus = true;
@@ -83,16 +82,24 @@ function PageReader(props) {
     });
     const { pages, mangaID, chapter } = props.chapterInfo;
     let { chapterIndex, offset } = props;
-    let newChapterIndex = chapterIndex;
+    let newChapterIndex = Number(chapterIndex);
+    let newNewChapterIndex = Number(chapterIndex);
+    let nextOffset = Number(offset);
+    let prevOffset = Number(offset);
     const { chapterID } = props;
     const [nextChapter, setNextChapter] = useState("");
+    const [prevChapter, setPrevChapter] = useState("");
     let page = pages[pageNumber];
-    if(chapterIndex === 23) {
-        chapterIndex = -1;
-        offset += 24;
-    }
     useEffect(() => {
+        setPageNumber(0);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         async function getNextChapter() {
+            if(chapterIndex === 23) {
+                // eslint-disable-next-line react-hooks/exhaustive-deps
+                newChapterIndex = -1;
+                // eslint-disable-next-line react-hooks/exhaustive-deps
+                nextOffset += 24;
+            }
             await axios({
                 method: "GET",
                 url: `${baseURL}/chapter`,
@@ -100,23 +107,45 @@ function PageReader(props) {
                     manga: mangaID,
                     translatedLanguage: ['en'],
                     limit: limit,
-                    offset: offset,
+                    offset: nextOffset,
                     "order[chapter]": "asc"
                 }
-            }).then(response => {
-                if(!response.data.results[0]) {
-                    // eslint-disable-next-line react-hooks/exhaustive-deps
-                    offset -= 24;
-                    return getNextChapter();
-                }
-                if(response.data.results[chapterIndex + 1] !== undefined)
-                    setNextChapter(response.data.results[chapterIndex + 1].data.id);
-                else if(response.data.results[chapterIndex + 1] === undefined)
-                    setNextChapter(response.data.results[newChapterIndex].data.id);
+            }).then(async response => {
+                if(response.data.results[newChapterIndex + 1] !== undefined)
+                    setNextChapter(response.data.results[newChapterIndex + 1].data.id);
+                else if(response.data.results[newChapterIndex + 1] === undefined)
+                    setNextChapter(chapterID); 
             }).catch(err => console.error(err));
         }
+        async function getPrevChapter() {
+            if(newNewChapterIndex === 0 && (offset >= 24)) {
+                // eslint-disable-next-line react-hooks/exhaustive-deps
+                newNewChapterIndex = 24;
+                // eslint-disable-next-line react-hooks/exhaustive-deps
+                prevOffset -= 24;
+            } else if(newNewChapterIndex === 0 && (Number(offset) === 0)) {
+                newChapterIndex = newNewChapterIndex;
+            }
+            await axios({
+                method: "GET",
+                url: `${baseURL}/chapter`,
+                params: {
+                    manga: mangaID,
+                    translatedLanguage: ['en'],
+                    limit: limit,
+                    offset: prevOffset,
+                    "order[chapter]": "asc"
+                }
+            }).then(async response => {
+                if(response.data.results[newNewChapterIndex - 1] !== undefined)
+                    setPrevChapter(response.data.results[newNewChapterIndex - 1].data.id);
+                else if(response.data.results[newNewChapterIndex - 1] === undefined)
+                    setPrevChapter(chapterID); 
+            }).catch(err => console.error(err));
+        }
+
+        getPrevChapter();
         getNextChapter();
-        setPageNumber(0);
 
         return () => {
             setNextChapter("");
@@ -203,8 +232,14 @@ function PageReader(props) {
     chapterIndex = Number(chapterIndex);
     offset = Number(offset);
     
-    let linkChapterIndex = parseInt(chapterIndex === 23 ? 0 : chapterIndex + 1);
-    let linkOffset = parseInt(chapterIndex === 23 ? offset + 24 : offset);
+    let linkIncChapterIndex = parseInt(chapterIndex === 23 ? 0 : chapterIndex + 1);
+    let linkIncOffset = parseInt(chapterIndex === 23 ? offset + 24 : offset);
+    let linkDecChapterIndex = parseInt(chapterIndex === 0 ? 23 : chapterIndex - 1);
+    let linkDecOffset = parseInt(chapterIndex === 0 ? (offset >= 24 ? offset - 24 : offset) : offset);
+    if(chapterIndex === 0 && offset === 0) {
+        linkDecChapterIndex = 0;
+        linkDecOffset = 0;
+    }
 
     return (<div>
         <div className="sidebar">
@@ -212,11 +247,11 @@ function PageReader(props) {
             <BackToMangaPage mangaID={mangaID} />
             <div className="chapter-buttons">
                 {/* eslint-disable-next-line */}
-                {/* <Link className="change-chapter" to={{pathname: `/chapter/${prevChapter}`, state: {chapterIndex: chapterIndex, offset: offset - 1 < 0 ? 0 : offset - 1}}}>
+                <Link className="change-chapter" to={{pathname: `/chapter/${prevChapter}/${linkDecChapterIndex}/${linkDecOffset}`}}>
                     <button className="chapter-button">Prev Chapter</button>
-                </Link> */}
+                </Link>
                 {/* eslint-disable-next-line */}
-                <Link className="change-chapter" to={{pathname: `/chapter/${nextChapter}/${linkChapterIndex}/${linkOffset}`}}>
+                <Link className="change-chapter" to={{pathname: `/chapter/${nextChapter}/${linkIncChapterIndex}/${linkIncOffset}`}}>
                     <button className="chapter-button">Next Chapter</button>
                 </Link>
             </div>
