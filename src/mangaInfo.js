@@ -158,7 +158,7 @@ function Chapter(props) {
     const { chapter, chapterID, chapterIndex } = props.chapter;
     const offset = props.offset;
     return (
-        <Link className="chapter-container" to={{pathname: `/chapter/${chapterID}`, state: {chapterIndex: chapterIndex, offset: offset}}}>
+        <Link className="chapter-container" to={{pathname: `/chapter/${chapterID}/${chapterIndex}/${offset}`}}>
             <p className="chapter">Chapter {chapter}</p>
         </Link>
     )

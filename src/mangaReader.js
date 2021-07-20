@@ -9,9 +9,9 @@ const baseURL = 'https://wandering-sound-dad3.nabilomi.workers.dev/'; // TEST: '
 
 export default function MangaReader(props) {
     // TODO: REWORK THE ENTIRE FETCHING PORTION OF THIS TO MAKE IT NON RELIANT ON PREVIOUS STATE
-    const { history, match } = props;
-    const chapterID = match.params.chapterid;
-    const { chapterIndex, offset } = history.location.state;
+    const { match } = props;
+    const { chapterID, chapterIndex, offset } = match.params;
+    console.log(match.params)
     const [chapterInfo, setChapterInfo] = useState({});
     let dataSaverStatus = false;
     const preloadStatus = true;
@@ -122,7 +122,7 @@ function PageReader(props) {
             setNextChapter("");
         }
     // eslint-disable-next-line
-    },[chapterID]);
+    },[chapterID, offset, chapterIndex]);
 
     function changeStyle(e) {
         e.preventDefault();
@@ -200,7 +200,12 @@ function PageReader(props) {
         document.body.scrollTop = 0; // For Safari
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
     } 
+    chapterIndex = Number(chapterIndex);
+    offset = Number(offset);
     
+    let linkChapterIndex = parseInt(chapterIndex === 23 ? 0 : chapterIndex + 1);
+    let linkOffset = parseInt(chapterIndex === 23 ? offset + 24 : offset);
+
     return (<div>
         <div className="sidebar">
             <BackToHome />
@@ -211,7 +216,7 @@ function PageReader(props) {
                     <button className="chapter-button">Prev Chapter</button>
                 </Link> */}
                 {/* eslint-disable-next-line */}
-                <Link className="change-chapter" to={{pathname: `/chapter/${nextChapter}`, state: {chapterIndex: (chapterIndex == 23 ? 0 : chapterIndex + 1), offset: (chapterIndex == 23 ? offset + 24 : offset)}}}>
+                <Link className="change-chapter" to={{pathname: `/chapter/${nextChapter}/${linkChapterIndex}/${linkOffset}`}}>
                     <button className="chapter-button">Next Chapter</button>
                 </Link>
             </div>
