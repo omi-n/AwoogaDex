@@ -5,9 +5,10 @@ import useEventListener from '@use-it/event-listener';
 const axios = require("axios");
 
 const limit = 24;
-const baseURL = 'https://wandering-sound-dad3.nabilomi.workers.dev/';
+const baseURL = 'https://wandering-sound-dad3.nabilomi.workers.dev/'; // TEST: 'https://wandering-sound-dad3.nabilomi.workers.dev/'
 
 export default function MangaReader(props) {
+    // TODO: REWORK THE ENTIRE FETCHING PORTION OF THIS TO MAKE IT NON RELIANT ON PREVIOUS STATE
     const { history, match } = props;
     const chapterID = match.params.chapterid;
     const { chapterIndex, offset } = history.location.state;
@@ -86,11 +87,10 @@ function PageReader(props) {
     const { chapterID } = props;
     const [nextChapter, setNextChapter] = useState("");
     let page = pages[pageNumber];
-    if(chapterIndex == 23) {
+    if(chapterIndex === 23) {
         chapterIndex = -1;
         offset += 24;
     }
-    console.log(offset);
     useEffect(() => {
         async function getNextChapter() {
             await axios({
@@ -105,16 +105,14 @@ function PageReader(props) {
                 }
             }).then(response => {
                 if(!response.data.results[0]) {
+                    // eslint-disable-next-line react-hooks/exhaustive-deps
                     offset -= 24;
                     return getNextChapter();
                 }
-                console.log(response.data.results, chapterIndex, newChapterIndex);
-                if(response.data.results[chapterIndex + 1] != undefined)
+                if(response.data.results[chapterIndex + 1] !== undefined)
                     setNextChapter(response.data.results[chapterIndex + 1].data.id);
-                else if(response.data.results[chapterIndex + 1] == undefined)
-                    setNextChapter(response.data.results[newChapterIndex].data.id)
-                
-                
+                else if(response.data.results[chapterIndex + 1] === undefined)
+                    setNextChapter(response.data.results[newChapterIndex].data.id);
             }).catch(err => console.error(err));
         }
         getNextChapter();
