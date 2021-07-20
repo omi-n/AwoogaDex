@@ -80,14 +80,51 @@ function PageReader(props) {
         width: "",
         height: ""
     });
-    const { pages, mangaID } = props.chapterInfo;
+    const { pages, mangaID, chapter } = props.chapterInfo;
     let { chapterIndex, offset } = props;
+    let newChapterIndex = chapterIndex;
     const { chapterID } = props;
     const [nextChapter, setNextChapter] = useState("");
-    const [prevChapter, setPrevChapter] = useState("");
-    const [currentChapter, setCurrentChapter] = useState("");
     let page = pages[pageNumber];
+    if(chapterIndex == 23) {
+        chapterIndex = -1;
+        offset += 24;
+    }
+    console.log(offset);
+    useEffect(() => {
+        async function getNextChapter() {
+            await axios({
+                method: "GET",
+                url: `${baseURL}/chapter`,
+                params: {
+                    manga: mangaID,
+                    translatedLanguage: ['en'],
+                    limit: limit,
+                    offset: offset,
+                    "order[chapter]": "asc"
+                }
+            }).then(response => {
+                if(!response.data.results[0]) {
+                    offset -= 24;
+                    return getNextChapter();
+                }
+                console.log(response.data.results, chapterIndex, newChapterIndex);
+                if(response.data.results[chapterIndex + 1] != undefined)
+                    setNextChapter(response.data.results[chapterIndex + 1].data.id);
+                else if(response.data.results[chapterIndex + 1] == undefined)
+                    setNextChapter(response.data.results[newChapterIndex].data.id)
+                
+                
+            }).catch(err => console.error(err));
+        }
+        getNextChapter();
+        setPageNumber(0);
 
+        return () => {
+            setNextChapter("");
+        }
+    // eslint-disable-next-line
+    },[chapterID]);
 
     function changeStyle(e) {
         e.preventDefault();
@@ -154,11 +191,11 @@ function PageReader(props) {
             <BackToMangaPage mangaID={mangaID} />
             <div className="chapter-buttons">
                 {/* eslint-disable-next-line */}
-                <Link className="change-chapter" to={{pathname: `/chapter/${prevChapter}`, state: {}}}>
+                {/* <Link className="change-chapter" to={{pathname: `/chapter/${prevChapter}`, state: {chapterIndex: chapterIndex, offset: offset - 1 < 0 ? 0 : offset - 1}}}>
                     <button className="chapter-button">Prev Chapter</button>
-                </Link>
+                </Link> */}
                 {/* eslint-disable-next-line */}
-                <Link className="change-chapter" to={{pathname: `/chapter/${nextChapter}`, state: {}}}>
+                <Link className="change-chapter" to={{pathname: `/chapter/${nextChapter}`, state: {chapterIndex: (chapterIndex == 23 ? 0 : chapterIndex + 1), offset: (chapterIndex == 23 ? offset + 24 : offset)}}}>
                     <button className="chapter-button">Next Chapter</button>
                 </Link>
             </div>
@@ -176,7 +213,7 @@ function PageReader(props) {
                 </select>
                 <button className="form-submit" type="submit">✓</button>
             </form>
-            <p className="page-number">Chapter {currentChapter} Page {pageNumber + 1}</p>
+            <p className="page-number">Chapter {chapter} Page {pageNumber + 1}</p>
         </div>
         <div className="reader-page">
             <div className="click-to-change">

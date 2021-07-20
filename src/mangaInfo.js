@@ -15,6 +15,7 @@ export default function Manga({ match }) {
     const limit = 24;
 
     useEffect(() => {
+        console.log(offset);
         async function getMangaInfo(mangaID) {
             await axios({
                 method: "GET",
