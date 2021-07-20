@@ -115,6 +115,19 @@ hr {
     margin-right: .5rem;
 }
 
+@media(max-width: 1500px) {
+    .manga-tags {
+        display: grid;
+        grid-template-areas:
+            "a a";
+        justify-content: center;
+    }
+
+    .tag {
+        width: 18vw;
+    }
+}
+
 @media(max-width: 1300px) {
     .manga-info {
         padding: 1rem;
@@ -146,19 +159,6 @@ hr {
     }
 
     .tag {
-        width: 40vw;
-    }
-}
-
-@media(max-width: 1500px) {
-    .manga-tags {
-        display: grid;
-        grid-template-areas:
-            "a a";
-        justify-content: center;
-    }
-
-    .tag {
-        width: 15vw;
+        width: 36vw;
     }
 }
