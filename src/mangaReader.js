@@ -9,11 +9,11 @@ const baseURL = 'https://wandering-sound-dad3.nabilomi.workers.dev/';
 
 export default function MangaReader(props) {
     const { history, match } = props;
-    const { chapterIndex, offset} = history.location.state;
+    const chapterID = match.params.chapterid;
+    const { chapterIndex, offset } = history.location.state;
     const [chapterInfo, setChapterInfo] = useState({});
     let dataSaverStatus = false;
     const preloadStatus = true;
-    const chapterID = match.params.chapterid;
     let pages = [];
     useEffect(() => {
         async function getChapter(chapterID, _callback) {
@@ -81,45 +81,13 @@ function PageReader(props) {
         height: ""
     });
     const { pages, mangaID } = props.chapterInfo;
-    const { chapterIndex, offset, chapterID } = props;
+    let { chapterIndex, offset } = props;
+    const { chapterID } = props;
     const [nextChapter, setNextChapter] = useState("");
     const [prevChapter, setPrevChapter] = useState("");
+    const [currentChapter, setCurrentChapter] = useState("");
     let page = pages[pageNumber];
-    // chapterIndex =  (chapterIndex === limit ? 0 : chapterIndex)    
-    useEffect(() => {
-        setPageNumber(0);
-        async function getNextChapter() {
-            let gnextChapter;
-            let gprevChapter;
-            await axios({
-                method: "GET",
-                url: `${baseURL}/chapter`,
-                params: {
-                    manga: mangaID,
-                    translatedLanguage: ['en'],
-                    limit: limit,
-                    offset: (chapterIndex === limit ? offset + 1 : offset),
-                    "order[chapter]": "asc"
-                }
-            }).then(response => {
-                gnextChapter = response.data.results[(chapterIndex === limit ? 0 : chapterIndex + 1)].data.id;
-                gprevChapter = response.data.results[(chapterIndex === 0 ? chapterIndex : chapterIndex - 1)].data.id;
-            }).catch(err => console.error(err));
-            return [gnextChapter, gprevChapter];
-        }
-        async function wrap() {
-            let [ gnextChapter, gprevChapter ] = await getNextChapter();
-            setNextChapter(gnextChapter);
-            setPrevChapter(gprevChapter);
-        }
-        wrap();
 
-        return () => {
-            setNextChapter("");
-            setPrevChapter("");
-        }
-    // eslint-disable-next-line
-    },[chapterID]);
 
     function changeStyle(e) {
         e.preventDefault();
@@ -186,11 +154,11 @@ function PageReader(props) {
             <BackToMangaPage mangaID={mangaID} />
             <div className="chapter-buttons">
                 {/* eslint-disable-next-line */}
-                <Link className="change-chapter" to={{pathname: `/chapter/${prevChapter}`, state: {chapterIndex: chapterIndex - 1, offset: offset}}}>
+                <Link className="change-chapter" to={{pathname: `/chapter/${prevChapter}`, state: {}}}>
                     <button className="chapter-button">Prev Chapter</button>
                 </Link>
                 {/* eslint-disable-next-line */}
-                <Link className="change-chapter" to={{pathname: `/chapter/${nextChapter}`, state: {chapterIndex: chapterIndex + 1, offset: offset}}}>
+                <Link className="change-chapter" to={{pathname: `/chapter/${nextChapter}`, state: {}}}>
                     <button className="chapter-button">Next Chapter</button>
                 </Link>
             </div>
@@ -208,7 +176,7 @@ function PageReader(props) {
                 </select>
                 <button className="form-submit" type="submit">✓</button>
             </form>
-            <p className="page-number">Page {pageNumber + 1}</p>
+            <p className="page-number">Chapter {currentChapter} Page {pageNumber + 1}</p>
         </div>
         <div className="reader-page">
             <div className="click-to-change">

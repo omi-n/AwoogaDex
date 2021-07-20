@@ -93,6 +93,11 @@ a {
     transition: 0.2s;
 }
 
+.manga-card-i {
+    opacity: 1;
+    transition: opacity 1s;
+}
+
 .manga-text-info {
     display: flex;
     flex-direction: column;
