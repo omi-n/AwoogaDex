@@ -20,6 +20,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "firebase": "firebase deploy --only hosting",
+    "deploy": "npm run build && npm run firebase",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
