@@ -82,13 +82,15 @@ function PageReader(props) {
     });
     const { pages, mangaID } = props.chapterInfo;
     const { chapterIndex, offset, chapterID } = props;
-    const [nextChapter, setNextChapter] = useState("")
+    const [nextChapter, setNextChapter] = useState("");
+    const [prevChapter, setPrevChapter] = useState("");
     let page = pages[pageNumber];
-    // chapterIndex =  (chapterIndex === limit ? 0 : chapterIndex)
-
+    // chapterIndex =  (chapterIndex === limit ? 0 : chapterIndex)    
     useEffect(() => {
+        setPageNumber(0);
         async function getNextChapter() {
-            let nextChapter;
+            let gnextChapter;
+            let gprevChapter;
             await axios({
                 method: "GET",
                 url: `${baseURL}/chapter`,
@@ -100,18 +102,23 @@ function PageReader(props) {
                     "order[chapter]": "asc"
                 }
             }).then(response => {
-                nextChapter = response.data.results[(chapterIndex === limit ? 0 : chapterIndex + 1)].data.id;
+                gnextChapter = response.data.results[(chapterIndex === limit ? 0 : chapterIndex + 1)].data.id;
+                gprevChapter = response.data.results[(chapterIndex === 0 ? chapterIndex : chapterIndex - 1)].data.id;
             }).catch(err => console.error(err));
-            return nextChapter;
+            return [gnextChapter, gprevChapter];
         }
         async function wrap() {
-            setNextChapter(await getNextChapter());
+            let [ gnextChapter, gprevChapter ] = await getNextChapter();
+            setNextChapter(gnextChapter);
+            setPrevChapter(gprevChapter);
         }
         wrap();
 
         return () => {
             setNextChapter("");
+            setPrevChapter("");
         }
+    // eslint-disable-next-line
     },[chapterID]);
 
     function changeStyle(e) {
@@ -179,7 +186,9 @@ function PageReader(props) {
             <BackToMangaPage mangaID={mangaID} />
             <div className="chapter-buttons">
                 {/* eslint-disable-next-line */}
-                <a className="change-chapter"><button className="chapter-button">Prev Chapter</button></a>
+                <Link className="change-chapter" to={{pathname: `/chapter/${prevChapter}`, state: {chapterIndex: chapterIndex - 1, offset: offset}}}>
+                    <button className="chapter-button">Prev Chapter</button>
+                </Link>
                 {/* eslint-disable-next-line */}
                 <Link className="change-chapter" to={{pathname: `/chapter/${nextChapter}`, state: {chapterIndex: chapterIndex + 1, offset: offset}}}>
                     <button className="chapter-button">Next Chapter</button>
@@ -204,9 +213,9 @@ function PageReader(props) {
         <div className="reader-page">
             <div className="click-to-change">
                 {/* eslint-disable-next-line */}
-                <a readOnly className="change-page-i noSelect" type="text" href="#top" onClick={decrementPageNumber}></a>
+                <span readOnly className="change-page-i noSelect" type="text" href="#top" onClick={decrementPageNumber}></span>
                 {/* eslint-disable-next-line */}
-                <a readOnly className="change-page-i noSelect" type="text" href="#top" onClick={incrementPageNumber}></a>
+                <span readOnly className="change-page-i noSelect" type="text" href="#top" onClick={incrementPageNumber}></span>
             </div>
             <div className="dummy-div"></div>
             <div className="reader-container">
