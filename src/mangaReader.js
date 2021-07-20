@@ -27,7 +27,7 @@ export default function MangaReader({ match }) {
             }).then(async response => {
                 let resData = response.data.results[0].data.attributes;
                 // get base url to reconstruct the iamge ur
-                let imageBaseUrl = await axios.get(`https://api.mangadex.org/at-home/server/${chapterID}`);
+                let imageBaseUrl = await axios.get(`${baseURL}/at-home/server/${chapterID}`);
                 // eslint-disable-next-line react-hooks/exhaustive-deps
                 if(resData.dataSaver) dataSaverStatus = true;
                 // push all of the chapter pages into the pages array
@@ -63,7 +63,7 @@ export default function MangaReader({ match }) {
     }, [chapterID])
     
     return (
-        <div>
+        <div id="top">
             {chapterInfo.pages ? <PageReader chapterInfo={chapterInfo} /> : <p>Preloading all images, please wait. This is to prevent lag while reading.</p>}
         </div>
     )
@@ -74,8 +74,7 @@ function PageReader(props) {
     const [imgDisplay, setImgDisplay] = useState("original");
     const [imgStyle, setImgStyle] = useState({
         width: "",
-        height: "",
-        maxWidth: `80vw`
+        height: ""
     });
     const { pages } = props.chapterInfo;
     let page = pages[pageNumber];
@@ -95,7 +94,7 @@ function PageReader(props) {
         } else if(imgDisplay === "fit-height") {
             setImgStyle({
                 width: "",
-                maxHeight: "100vh"
+                height: "100vh"
             });
         }
     }
@@ -150,7 +149,7 @@ function PageReader(props) {
                 <button className="change-page" onClick={incrementPageNumber}>&gt;</button>
             </div>
             <form id="style-dropdown" onSubmit={e => changeStyle(e)} className="style-dropdown">
-                <select type="submit" name="style" onChange={e => setImgDisplay(e.target.value)} >
+                <select id="mobile-submit" type="submit" name="style" onChange={e => setImgDisplay(e.target.value)} >
                     <option value="original">Original</option>
                     <option value="fit-width">Fit Width</option>
                     <option value="fit-height">Fit Height</option>
@@ -160,8 +159,8 @@ function PageReader(props) {
         </div>
         <div className="reader-page">
             <div className="click-to-change">
-                <input class="change-page-i" type="text" onClick={decrementPageNumber}></input>
-                <input class="change-page-j" type="text" onClick={incrementPageNumber}></input>
+                <a readOnly class="change-page-i noSelect" type="text" href="#top" onClick={decrementPageNumber}></a>
+                <a readOnly class="change-page-i noSelect" type="text" href="#top" onClick={incrementPageNumber}></a>
             </div>
             <div className="dummy-div"></div>
             <div className="reader-container">
