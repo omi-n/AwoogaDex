@@ -144,6 +144,10 @@ hr {
         border-radius: .5rem;
         background-color: rgb(50, 50, 50);
     }
+
+    .tag {
+        width: 40vw;
+    }
 }
 
 @media(max-width: 1500px) {
@@ -155,6 +159,6 @@ hr {
     }
 
     .tag {
-        width: 40vw;
+        width: 15vw;
     }
 }
