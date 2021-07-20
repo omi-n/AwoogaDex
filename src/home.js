@@ -119,6 +119,16 @@ function SearchManga() {
         setOffset(0);
     }
 
+    function topFunction() {
+        // document.body.scrollTop = 0; // For Safari
+        // document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        window.scroll({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        });
+    }
+
     return (<>
         <div className="manga-search-container">
             <form onSubmit={triggerUseEffect}>
@@ -143,9 +153,18 @@ function SearchManga() {
         <div className="offset-container">
             <p className="submit-error">Page: {(offset + 25) / 25} / {Math.ceil(totalManga / 25)}</p>
             <div className="offset-buttons-container">
-                <button className="offset" id="prev" onClick={decrementOffset}>&lt;</button>
-                <button className="offset" id="" onClick={resetOffset}>1</button>
-                <button className="offset" id="next" onClick={incrementOffset}>&gt;</button>
+                <button className="offset" id="prev" onClick={() => {
+                    decrementOffset();
+                    topFunction();
+                }}>&lt;</button>
+                <button className="offset" id="" onClick={() => {
+                    resetOffset();
+                    topFunction();
+                }}>1</button>
+                <button className="offset" id="next" onClick={()=> {
+                    incrementOffset();
+                    topFunction();
+                }}>&gt;</button>
             </div>
         </div>
         {error ? <p className="submit-error">An error has ocurred! Check console for more details. <button onClick={clearError}><strong>Clear</strong></button></p> : <></>}
