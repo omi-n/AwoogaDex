@@ -182,8 +182,26 @@ function PageReader(props) {
     }
 
     useEventListener('keydown', handler);
+
+    //Get the button:
+    let mybutton = document.getElementById("myBtn");
+
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function() {scrollFunction()};
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            mybutton.style.display = "block";
+        }
+    }
+
+    // When the user clicks on the button, scroll to the top of the document
+    function topFunction() {
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    } 
     
-    return (<>
+    return (<div>
         <div className="sidebar">
             <BackToHome />
             <BackToMangaPage mangaID={mangaID} />
@@ -213,12 +231,16 @@ function PageReader(props) {
             </form>
             <p className="page-number">Chapter {chapter} Page {pageNumber + 1}</p>
         </div>
-        <div className="reader-page">
+        <div className="reader-page" id="top">
             <div className="click-to-change">
                 {/* eslint-disable-next-line */}
-                <span readOnly className="change-page-i noSelect" type="text" href="#top" onClick={decrementPageNumber}></span>
+                <span readOnly className="change-page-i noSelect" type="text" id="myBtn" onClick={() => {
+                    incrementPageNumber(); topFunction();
+                }}></span>
                 {/* eslint-disable-next-line */}
-                <span readOnly className="change-page-i noSelect" type="text" href="#top" onClick={incrementPageNumber}></span>
+                <span readOnly className="change-page-i noSelect" type="text" id="myBtn" onClick={() => {
+                    incrementPageNumber(); topFunction();
+                }}></span>
             </div>
             <div className="dummy-div"></div>
             <div className="reader-container">
@@ -226,7 +248,7 @@ function PageReader(props) {
                 <img style={imgStyle} id="img" className="reader-image" src={page} alt={`page ${pageNumber + 1} from manga`} />
             </div>
         </div>
-    </>)
+    </div>)
 }
 
 function BackToHome() {
