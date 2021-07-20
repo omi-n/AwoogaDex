@@ -247,11 +247,11 @@ function PageReader(props) {
             <BackToMangaPage mangaID={mangaID} />
             <div className="chapter-buttons">
                 {/* eslint-disable-next-line */}
-                <Link className="change-chapter" to={{pathname: `/chapter/${prevChapter}/${linkDecChapterIndex}/${linkDecOffset}`}}>
+                <Link className="change-chapter noSelect" to={{pathname: `/chapter/${prevChapter}/${linkDecChapterIndex}/${linkDecOffset}`}}>
                     <button className="chapter-button">Prev Chapter</button>
                 </Link>
                 {/* eslint-disable-next-line */}
-                <Link className="change-chapter" to={{pathname: `/chapter/${nextChapter}/${linkIncChapterIndex}/${linkIncOffset}`}}>
+                <Link className="change-chapter noSelect" to={{pathname: `/chapter/${nextChapter}/${linkIncChapterIndex}/${linkIncOffset}`}}>
                     <button className="chapter-button">Next Chapter</button>
                 </Link>
             </div>
