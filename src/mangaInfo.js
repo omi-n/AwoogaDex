@@ -75,13 +75,16 @@ export default function Manga({ match }) {
             }).then((response => {
                 const resData = response.data.results;
                 setTotalChapters(response.data.total);
+                let num = 0;
                 resData.forEach(res => {
                     engChap.push({
                         chapter: res.data.attributes.chapter,
-                        chapterID: res.data.id
+                        chapterID: res.data.id,
+                        chapterIndex: num
                         // images: resData[i].data.attributes.data,
                         // chapterHash: resData[i].data.attributes.hash
                     });
+                    num++;
                 });
                 setChapterList(engChap);
             })).catch(err => console.error(err));
@@ -126,7 +129,7 @@ export default function Manga({ match }) {
                     <p>{mangaInfo.description}</p>
                     <p><strong>Status:</strong> {mangaInfo.status}</p>
                     <p><strong>Author:</strong> {mangaInfo.author}</p>
-                    <p className="artists"><strong>Artist(s):</strong> {mangaInfo.artists ? mangaInfo.artists.map(artist => `${artist}`) : <p>Artists Not Found.</p>}</p>
+                    <p className="artists"><strong>Artist(s):</strong> {mangaInfo.artists ? mangaInfo.artists.forEach(artist => `${artist}`) : <p>Artists Not Found.</p>}</p>
                     <p><br /><strong>Tags:</strong></p>
                     <div className="manga-tags">
                         {mangaInfo.tags && mangaInfo.tags.map(tag => <button className="tag" key={tag}>{tag}</button>)}
@@ -145,17 +148,17 @@ export default function Manga({ match }) {
             </div>
 
             <div className="chapter-list">
-                {chapterList.length > 0 ? chapterList.map(chapter => <Chapter key={chapter.id} chapterList={chapterList} chapter={chapter} />) : <p className="chapter-error">No Further Chapters in the MangaDex API.</p>}
+                {chapterList.length > 0 ? chapterList.map(chapter => <Chapter key={chapter.id} offset={offset} chapter={chapter} />) : <p className="chapter-error">No Further Chapters in the MangaDex API.</p>}
             </div>
         </div>
     )
 }
 
 function Chapter(props) {
-    const { chapter, chapterID } = props.chapter;
-    // const chapterList = props.chapterList;
+    const { chapter, chapterID, chapterIndex } = props.chapter;
+    const offset = props.offset;
     return (
-        <Link className="chapter-container" to={{pathname: `/chapter/${chapterID}`}}>
+        <Link className="chapter-container" to={{pathname: `/chapter/${chapterID}`, state: {chapterIndex: chapterIndex, offset: offset}}}>
             <p className="chapter">Chapter {chapter}</p>
         </Link>
     )

@@ -1,15 +1,19 @@
 import "./mangaReader.css";
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import useEventListener from '@use-it/event-listener';
 const axios = require("axios");
 
-export default function MangaReader({ match }) {
+const limit = 24;
+const baseURL = 'https://wandering-sound-dad3.nabilomi.workers.dev/';
+
+export default function MangaReader(props) {
+    const { history, match } = props;
+    const { chapterIndex, offset} = history.location.state;
     const [chapterInfo, setChapterInfo] = useState({});
     let dataSaverStatus = false;
     const preloadStatus = true;
-    const limit = 24;
     const chapterID = match.params.chapterid;
-    const baseURL = 'https://wandering-sound-dad3.nabilomi.workers.dev/';
     let pages = [];
     useEffect(() => {
         async function getChapter(chapterID, _callback) {
@@ -64,7 +68,7 @@ export default function MangaReader({ match }) {
     
     return (
         <div id="top">
-            {chapterInfo.pages ? <PageReader chapterInfo={chapterInfo} /> : <p>Preloading all images, please wait. This is to prevent lag while reading.</p>}
+            {chapterInfo.pages ? <PageReader chapterID={chapterID} chapterIndex={chapterIndex} offset={offset} chapterInfo={chapterInfo} /> : <p>Preloading all images, please wait. This is to prevent lag while reading.</p>}
         </div>
     )
 }
@@ -77,7 +81,38 @@ function PageReader(props) {
         height: ""
     });
     const { pages, mangaID } = props.chapterInfo;
+    const { chapterIndex, offset, chapterID } = props;
+    const [nextChapter, setNextChapter] = useState("")
     let page = pages[pageNumber];
+    // chapterIndex =  (chapterIndex === limit ? 0 : chapterIndex)
+
+    useEffect(() => {
+        async function getNextChapter() {
+            let nextChapter;
+            await axios({
+                method: "GET",
+                url: `${baseURL}/chapter`,
+                params: {
+                    manga: mangaID,
+                    translatedLanguage: ['en'],
+                    limit: limit,
+                    offset: (chapterIndex === limit ? offset + 1 : offset),
+                    "order[chapter]": "asc"
+                }
+            }).then(response => {
+                nextChapter = response.data.results[(chapterIndex === limit ? 0 : chapterIndex + 1)].data.id;
+            }).catch(err => console.error(err));
+            return nextChapter;
+        }
+        async function wrap() {
+            setNextChapter(await getNextChapter());
+        }
+        wrap();
+
+        return () => {
+            setNextChapter("");
+        }
+    },[chapterID]);
 
     function changeStyle(e) {
         e.preventDefault();
@@ -146,7 +181,9 @@ function PageReader(props) {
                 {/* eslint-disable-next-line */}
                 <a className="change-chapter"><button className="chapter-button">Prev Chapter</button></a>
                 {/* eslint-disable-next-line */}
-                <a className="change-chapter"><button className="chapter-button">Next Chapter</button></a>
+                <Link className="change-chapter" to={{pathname: `/chapter/${nextChapter}`, state: {chapterIndex: chapterIndex + 1, offset: offset}}}>
+                    <button className="chapter-button">Next Chapter</button>
+                </Link>
             </div>
             <div className="nav-buttons">
                 <button className="change-page" onClick={decrementPageNumber}>&lt;</button>
