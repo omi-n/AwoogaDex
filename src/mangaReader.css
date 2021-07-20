@@ -57,6 +57,7 @@ select:hover {
 .nav-buttons {
     display: flex;
     flex-direction: row;
+    margin-top: 1rem;
     width: 20vw;
     justify-content: center;
 }
@@ -101,7 +102,7 @@ select:hover {
 
 #home-btn-sidebar {
     position: relative;
-    width: 19vw;
+    width: 18vw;
 }
 
 .home-btn-sidebar {
@@ -123,6 +124,23 @@ select:hover {
     user-select: none;
 }
 
+.noSelect:hover {
+    cursor: default;
+}
+
+.chapter-buttons {
+    display: flex;
+    flex-direction: row;
+    width: 20vw;
+    justify-content: center;
+}
+
+.change-chapter {
+    margin: auto;
+    margin-top: 1rem;
+    margin-bottom: 0;
+}
+
 @media(max-width: 1400px) {
     .reader-page {
         flex-direction: column-reverse;
@@ -138,7 +156,7 @@ select:hover {
     }
 
     .nav-buttons {
-        width: 95vw;
+        display: none;
     }
 
     #home-btn-sidebar {
@@ -176,5 +194,13 @@ select:hover {
     .reader-container {
         margin-top: 1rem;
         display: flex;
+    }
+
+    .chapter-buttons {
+        width: 100vw;
+    }
+
+    .chapter-button {
+        width: 40vw;
     }
 }

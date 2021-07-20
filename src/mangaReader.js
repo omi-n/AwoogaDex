@@ -40,8 +40,8 @@ export default function MangaReader({ match }) {
                     chapter: resData.chapter,
                     volume: (resData.volume ? resData.volume : "?"),
                     pages: pages,
+                    mangaID: response.data.results[0].relationships[1].id
                 });
-                console.log("called")
             }).catch(err => console.error(err));
             _callback();
         }
@@ -76,7 +76,7 @@ function PageReader(props) {
         width: "",
         height: ""
     });
-    const { pages } = props.chapterInfo;
+    const { pages, mangaID } = props.chapterInfo;
     let page = pages[pageNumber];
 
     function changeStyle(e) {
@@ -141,11 +141,17 @@ function PageReader(props) {
     return (<>
         <div className="sidebar">
             <BackToHome />
-            <p className="page-number">Page {pageNumber + 1}</p>
+            <BackToMangaPage mangaID={mangaID} />
+            <div className="chapter-buttons">
+                {/* eslint-disable-next-line */}
+                <a className="change-chapter"><button className="chapter-button">Prev Chapter</button></a>
+                {/* eslint-disable-next-line */}
+                <a className="change-chapter"><button className="chapter-button">Next Chapter</button></a>
+            </div>
             <div className="nav-buttons">
                 <button className="change-page" onClick={decrementPageNumber}>&lt;</button>
-                <button className="change-page" onClick={startPageNumber}>Start</button>
-                <button className="change-page" onClick={endPageNumber}>End</button>
+                <button className="change-page" onClick={startPageNumber}>&lt;&lt;</button>
+                <button className="change-page" onClick={endPageNumber}>&gt;&gt;</button>
                 <button className="change-page" onClick={incrementPageNumber}>&gt;</button>
             </div>
             <form id="style-dropdown" onSubmit={e => changeStyle(e)} className="style-dropdown">
@@ -156,11 +162,14 @@ function PageReader(props) {
                 </select>
                 <button className="form-submit" type="submit">✓</button>
             </form>
+            <p className="page-number">Page {pageNumber + 1}</p>
         </div>
         <div className="reader-page">
             <div className="click-to-change">
-                <a readOnly class="change-page-i noSelect" type="text" href="#top" onClick={decrementPageNumber}></a>
-                <a readOnly class="change-page-i noSelect" type="text" href="#top" onClick={incrementPageNumber}></a>
+                {/* eslint-disable-next-line */}
+                <a readOnly className="change-page-i noSelect" type="text" href="#top" onClick={decrementPageNumber}></a>
+                {/* eslint-disable-next-line */}
+                <a readOnly className="change-page-i noSelect" type="text" href="#top" onClick={incrementPageNumber}></a>
             </div>
             <div className="dummy-div"></div>
             <div className="reader-container">
@@ -175,6 +184,15 @@ function BackToHome() {
     return (
         <div className="home-btn-sidebar">
             <a id="home-btn-link" className="home-btn-link" href="/"><button id="home-btn-sidebar">Back To Home</button></a>
+        </div>
+    )
+}
+
+function BackToMangaPage(props) {
+    const mangaID = props.mangaID;
+    return (
+        <div className="home-btn-sidebar">
+            <a id="home-btn-link" className="home-btn-link" href={`/manga/${mangaID}`}><button id="home-btn-sidebar">Back To Manga Page</button></a>
         </div>
     )
 }
