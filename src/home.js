@@ -125,7 +125,7 @@ function SearchManga() {
             <input className="manga-submit" type="text" value={mangaTitle} onChange={(e) => {
                 setMangaTitle(e.target.value);
                 setOffset(0);
-            }} id="manga-search" placeholder="Search By Title!" />
+            }} id="manga-search" placeholder="Press enter to search." />
             </form>
         </div>
 
