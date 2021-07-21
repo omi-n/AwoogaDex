@@ -24,6 +24,7 @@ export default function Manga({ match }) {
                 }
             }).then(response => {
                 const resData = response.data.results[0];
+                console.log(resData)
                 let coverFoundStatus = false;
                 let coverIdx;
                 for (let i = 0; i < resData.relationships.length; i++) {
@@ -32,7 +33,7 @@ export default function Manga({ match }) {
                     coverIdx = i;
                 }
                 let coverFileName = resData.relationships[coverIdx].attributes.fileName;
-                const options = { enableEscapeTags: true }
+                const options = { enableEscapeTags: true, onlyAllowTags: ['i', 'hr', 'b', 'u'] }
                 // SHUT UP SHUT UP SHUT UP
                 // eslint-disable-next-line react-hooks/exhaustive-deps
                 let description = bbobReactRender(`${resData.data.attributes.description.en}`, presetReact(), options);

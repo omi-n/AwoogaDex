@@ -46,7 +46,7 @@ function SearchManga() {
                 params: {
                     limit: limit,
                     title: mangaTitle,
-                    contentRating: ["safe"],
+                    contentRating: ["safe", "suggestive"],
                     offset: offset
                 }
             }).then(response => {
