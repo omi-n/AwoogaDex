@@ -1,11 +1,11 @@
 import "./home.css";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-const axios = require("axios");
+import axios from "axios";
 require('dotenv').config();
 const baseURL = 'https://wandering-sound-dad3.nabilomi.workers.dev/';
 
-export default function Home() {
+export function Home() {
     return (
         <div className="init-container">
             <SiteHeader />
@@ -171,14 +171,14 @@ function SearchManga() {
     </>)
 }
 
-function MangaList(props) {
+export function MangaList(props) {
     const mangas = props.mangaArray;
     return (<>
         {(mangas.length > 0) ? mangas.map(manga => <MangaCard className="manga-card-i" key={manga.mangaID} manga={manga} />) : <p className="submit-error">Nothing found. Try another title?</p>}
     </>)
 }
 
-function MangaCard(props) {
+export function MangaCard(props) {
     let {
         title,
         description,

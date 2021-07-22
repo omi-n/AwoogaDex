@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import bbobReactRender from '@bbob/react/es/render';
 import presetReact from '@bbob/preset-react';
-const axios = require("axios");
+import axios from "axios";
 const baseURL = 'https://wandering-sound-dad3.nabilomi.workers.dev/';
 
 export default function Manga({ match }) {
@@ -24,7 +24,6 @@ export default function Manga({ match }) {
                 }
             }).then(response => {
                 const resData = response.data.results[0];
-                console.log(resData)
                 let coverFoundStatus = false;
                 let coverIdx;
                 for (let i = 0; i < resData.relationships.length; i++) {
@@ -48,7 +47,10 @@ export default function Manga({ match }) {
                 }
 
                 resData.data.attributes.tags.forEach(tag => {
-                    usefulMangaInfo.tags.push(tag.attributes.name.en);
+                    usefulMangaInfo.tags.push({
+                        tag: tag.attributes.name.en,
+                        tagID: tag.id
+                    });
                 });
 
                 resData.relationships.forEach(relationship => {
@@ -133,7 +135,7 @@ export default function Manga({ match }) {
                     <p className="artists"><strong>Artist(s):</strong> {mangaInfo.artists ? mangaInfo.artists.forEach(artist => `${artist}`) : <p>Artists Not Found.</p>}</p>
                     <p><br /><strong>Tags:</strong></p>
                     <div className="manga-tags">
-                        {mangaInfo.tags && mangaInfo.tags.map(tag => <button className="tag" key={tag}>{tag}</button>)}
+                        {mangaInfo.tags && mangaInfo.tags.map(tag => <Link to={{pathname: `/tag/${tag.tagID}+/1/!/1`}}><button className="tag" key={tag.tagID}>{tag.tag}</button></Link>)}
                     </div>
                 </div>
             </div>

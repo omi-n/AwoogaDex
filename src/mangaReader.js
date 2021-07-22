@@ -2,7 +2,7 @@ import "./mangaReader.css";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import useEventListener from '@use-it/event-listener';
-const axios = require("axios");
+import axios from "axios";
 
 const limit = 24;
 const baseURL = 'https://wandering-sound-dad3.nabilomi.workers.dev/'; // TEST: 'https://wandering-sound-dad3.nabilomi.workers.dev/'

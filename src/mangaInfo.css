@@ -159,6 +159,7 @@ hr {
     }
 
     .tag {
-        width: 36vw;
+        width: 38vw;
+        font-size: 14px;
     }
 }
