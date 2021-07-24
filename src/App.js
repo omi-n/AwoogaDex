@@ -15,7 +15,7 @@ function App() {
           <Route exact path="/" component={Home} />
           <Route path="/manga/:id" component={Manga} />
           <Route path="/chapter/:chapterID/:chapterIndex/:offset" component={MangaReader} />
-          <Route path="/tag/:tag/:andor/:extag/:exandor" component={Tags} />
+          <Route path="/tag/:tag/:tagName" component={Tags} />
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>

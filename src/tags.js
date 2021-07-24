@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { MangaCard, MangaList } from "./home";
+import "./tags.css";
+import { MangaList, Offsets } from "./home";
 
 const baseURL = 'https://wandering-sound-dad3.nabilomi.workers.dev/';
 const limit = 10;
@@ -9,9 +10,7 @@ export default function Tags(props) {
     const [offset, setOffset] = useState(0);
     const [mangaArray, setMangaArray] = useState([]);
     const [totalManga, setTotalManga] = useState(0);
-    const { tag, andor, extag, exandor } = props.match.params;
-    let extags = extag.split("!");
-    extags = extags.filter(t => t.length === 36);
+    const { tag, tagName } = props.match.params;
     let tags = tag.split("+");
     tags = tags.filter(t => t.length === 36);
 
@@ -23,13 +22,9 @@ export default function Tags(props) {
                 params: {
                     limit: limit,
                     offset: offset,
-                    includedTags: tags,
-                    includedTagsMode: (andor ? "AND" : "OR"),
-                    excludedTags: extags,
-                    excludedTagsMode: (exandor ? "AND" : "OR")
+                    includedTags: tags
                 }
             }).then(response => {
-                // response.data.total is the total results
                 setMangaArray([]);
                 setTotalManga(response.data.total);
                 let responseArr = response.data.results;
@@ -44,7 +39,6 @@ export default function Tags(props) {
                         }
                     }
                     let mangaID = response.data.id;
-                    console.log(response.relationships[coverIdx]);
                     let coverFileName;
                     if(coverFoundStatus)
                         coverFileName = response.relationships[coverIdx].attributes.fileName;
@@ -62,16 +56,19 @@ export default function Tags(props) {
                 // console.log("response mangas: ", responseArr);
                 // console.log("mangas: ", mangas)
                 setMangaArray(mangas);
-
             }).catch(err => console.error(err));
         }
         searchByTag();
-    }, [tag]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tag, offset]);
+
 
     return (
-        <div>
+        <div className="init-container tag-container">
+            <h1>{tagName}</h1>
+            <Offsets offset={offset} setOffset={setOffset} totalManga={totalManga} />
             <MangaList mangaArray={mangaArray} />
+            <Offsets offset={offset} setOffset={setOffset} totalManga={totalManga} />
         </div>
     )
 }
-

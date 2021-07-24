@@ -135,7 +135,7 @@ export default function Manga({ match }) {
                     <p className="artists"><strong>Artist(s):</strong> {mangaInfo.artists ? mangaInfo.artists.forEach(artist => `${artist}`) : <p>Artists Not Found.</p>}</p>
                     <p><br /><strong>Tags:</strong></p>
                     <div className="manga-tags">
-                        {mangaInfo.tags && mangaInfo.tags.map(tag => <Link to={{pathname: `/tag/${tag.tagID}+/1/!/1`}}><button className="tag" key={tag.tagID}>{tag.tag}</button></Link>)}
+                        {mangaInfo.tags && mangaInfo.tags.map(tag => <Link to={{pathname: `/tag/${tag.tagID}/${tag.tag}`}}><button className="tag" key={tag.tagID}>{tag.tag}</button></Link>)}
                     </div>
                 </div>
             </div>

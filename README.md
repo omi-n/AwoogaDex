@@ -13,10 +13,9 @@
 ## Features
 Not many, that's pretty much the whole point.
 - Title Search
-- Tag Search (WIP)
+- Tag Search
 - Reader
 - Pre-loads all manga images with the mangadex compressed image files.
-- Toggle for aforementioned (WIP)
 
 
 ## Why use this over MangaDex?
