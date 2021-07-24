@@ -8,15 +8,16 @@ const limit = 24;
 const baseURL = 'https://wandering-sound-dad3.nabilomi.workers.dev/'; // TEST: 'https://wandering-sound-dad3.nabilomi.workers.dev/'
 
 export default function MangaReader(props) {
-    // TODO: REWORK THE ENTIRE FETCHING PORTION OF THIS TO MAKE IT NON RELIANT ON PREVIOUS STATE
     const { match } = props;
     const { chapterID, chapterIndex, offset } = match.params;
+    
     const [chapterInfo, setChapterInfo] = useState({});
     let dataSaverStatus = false;
     const preloadStatus = true;
     let pages = [];
+
     useEffect(() => {
-        async function getChapter(chapterID, _callback) {
+        async function getChapter(_callback) {
             // eslint-disable-next-line react-hooks/exhaustive-deps
             pages = [];
             await axios({
@@ -30,14 +31,16 @@ export default function MangaReader(props) {
                 }
             }).then(async response => {
                 let resData = response.data.results[0].data.attributes;
-                // get base url to reconstruct the iamge ur
-                let imageBaseUrl = await axios.get(`${baseURL}/at-home/server/${chapterID}`);
+                // get base url to reconstruct the image url. this may not always be needed.
+                // let imageBaseUrl = await axios.get(`${baseURL}/at-home/server/${chapterID}`);
+                // imageBaseUrl.data.baseUrl
+                // console.log(imageBaseUrl);
                 // eslint-disable-next-line react-hooks/exhaustive-deps
                 if(resData.dataSaver) dataSaverStatus = true;
                 // push all of the chapter pages into the pages array
                 const pageData = (dataSaverStatus ? resData.dataSaver : resData.data);
                 pageData.forEach(page => {
-                    pages.push(`${imageBaseUrl.data.baseUrl}/${dataSaverStatus ? 'data-saver' : 'data'}/${resData.hash}/${page}`);
+                    pages.push(`https://uploads.mangadex.org/${dataSaverStatus ? 'data-saver' : 'data'}/${resData.hash}/${page}`);
                 });
 
                 setChapterInfo({
@@ -58,12 +61,11 @@ export default function MangaReader(props) {
                 return;
             }
         }
-        // this is so there isnt any stupid ass error with "OH YEAH IM FUCKING REACTARDED AND I AM AN IMPATIENT PIECE OF SHIT HOLY FUCK"
-        function load() {
-            getChapter(chapterID, () => preloadPages());
-        }
 
-        load();
+        // preloading pages is extremely cheap in terms of speed, has big benefit. uses data saver images.
+        getChapter(() => {
+            preloadPages();
+        });
     }, [chapterID])
     
     return (
@@ -80,23 +82,29 @@ function PageReader(props) {
         width: "",
         height: ""
     });
-    const { pages, mangaID, chapter } = props.chapterInfo;
-    let { chapterIndex, offset } = props;
-    let newChapterIndex = Number(chapterIndex);
-    let newNewChapterIndex = Number(chapterIndex);
-    let nextOffset = Number(offset);
-    let prevOffset = Number(offset);
-    const { chapterID } = props;
     const [nextChapter, setNextChapter] = useState("");
     const [prevChapter, setPrevChapter] = useState("");
+
+    const { chapterID } = props;
+    const { pages, mangaID, chapter } = props.chapterInfo;
+    // have to turn this into a number later.
+    let { chapterIndex, offset } = props;
+
+    /* I know these variable names suck. Im too lazy to fix them lol */
+    let chapterIndexCopy = Number(chapterIndex);
+    let prevChapterIndex = Number(chapterIndex);
+    let nextOffset = Number(offset);
+    let prevOffset = Number(offset);
+
     let page = pages[pageNumber];
+
     useEffect(() => {
         setPageNumber(0);
         // eslint-disable-next-line react-hooks/exhaustive-deps
         async function getNextChapter() {
             if(chapterIndex === 23) {
                 // eslint-disable-next-line react-hooks/exhaustive-deps
-                newChapterIndex = -1;
+                chapterIndexCopy = -1;
                 // eslint-disable-next-line react-hooks/exhaustive-deps
                 nextOffset += 24;
             }
@@ -111,20 +119,25 @@ function PageReader(props) {
                     "order[chapter]": "asc"
                 }
             }).then(async response => {
-                if(response.data.results[newChapterIndex + 1] !== undefined)
-                    setNextChapter(response.data.results[newChapterIndex + 1].data.id);
-                else if(response.data.results[newChapterIndex + 1] === undefined)
+                if(response.data.results[chapterIndexCopy + 1] !== undefined) {
+                    setNextChapter(response.data.results[chapterIndexCopy + 1].data.id);
+                    if(response.data.results[chapterIndexCopy - 1] !== undefined) {
+                        setPrevChapter(response.data.results[chapterIndexCopy - 1].data.id);
+                    } else if(response.data.results[chapterIndexCopy - 1] === undefined) {
+                        getPrevChapter();
+                    }
+                } else if(response.data.results[chapterIndexCopy + 1] === undefined)
                     setNextChapter(chapterID); 
             }).catch(err => console.error(err));
         }
         async function getPrevChapter() {
-            if(newNewChapterIndex === 0 && (offset >= 24)) {
+            if(prevChapterIndex === 0 && (offset >= 24)) {
                 // eslint-disable-next-line react-hooks/exhaustive-deps
-                newNewChapterIndex = 24;
+                prevChapterIndex = 24;
                 // eslint-disable-next-line react-hooks/exhaustive-deps
                 prevOffset -= 24;
-            } else if(newNewChapterIndex === 0 && (Number(offset) === 0)) {
-                newChapterIndex = newNewChapterIndex;
+            } else if(prevChapterIndex === 0 && (Number(offset) === 0)) {
+                chapterIndexCopy = prevChapterIndex;
             }
             await axios({
                 method: "GET",
@@ -137,14 +150,13 @@ function PageReader(props) {
                     "order[chapter]": "asc"
                 }
             }).then(async response => {
-                if(response.data.results[newNewChapterIndex - 1] !== undefined)
-                    setPrevChapter(response.data.results[newNewChapterIndex - 1].data.id);
-                else if(response.data.results[newNewChapterIndex - 1] === undefined)
+                if(response.data.results[prevChapterIndex - 1] !== undefined)
+                    setPrevChapter(response.data.results[prevChapterIndex - 1].data.id);
+                else if(response.data.results[prevChapterIndex - 1] === undefined)
                     setPrevChapter(chapterID); 
             }).catch(err => console.error(err));
         }
 
-        getPrevChapter();
         getNextChapter();
 
         return () => {

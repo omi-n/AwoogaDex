@@ -57,9 +57,10 @@ function SearchManga() {
                 let responseArr = response.data.results;
                 let coverIdx;
                 let mangas = [];
-                responseArr.forEach(response => {
+                for(response of responseArr) {
                     let coverFoundStatus = false;
-                    for (let j = 0; j < response.relationships.length; j++) {
+                    let resRelLen = response.relationships.length
+                    for (let j = 0; j < resRelLen; j++) {
                         if (response.relationships[j].type === "cover_art") {
                             coverIdx = j;
                             coverFoundStatus = true;
@@ -74,8 +75,8 @@ function SearchManga() {
                         mangaID: response.data.id,
                         coverLink: (coverFoundStatus ? `https://uploads.mangadex.org/covers/${mangaID}/${coverFileName}.${imgsize}.jpg` : `https://cdn.discordapp.com/attachments/850613008782196776/866082390454829106/notfound.png`),
                         description: response.data.attributes.description.en.toString().substring(0, 400).concat("..."),
-                    });
-                });
+                    })
+                };
 
                 mangas.forEach(manga => {
                     if (manga.description.length < 4) manga.description = "No Description Found.";
