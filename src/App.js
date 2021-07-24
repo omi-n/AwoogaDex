@@ -1,8 +1,9 @@
-import './App.css';
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 
-import { Home } from "./home";
-import { Manga } from "./mangaInfo";
+import './App.css';
+
+import Home from "./home";
+import Manga from "./mangaInfo";
 import MangaReader from "./mangaReader";
 import NotFound from "./notFound";
 import Tags from "./tags";

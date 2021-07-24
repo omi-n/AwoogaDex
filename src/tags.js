@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+
 import "./tags.css";
-import { MangaList, Offsets } from "./home";
-import { BackToHome } from "./mangaInfo";
+
+import { MangaList, Offsets } from "./helper";
+import { BackToHome } from "./helper";
 
 const baseURL = 'https://wandering-sound-dad3.nabilomi.workers.dev/';
 const limit = 10;

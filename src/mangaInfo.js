@@ -1,12 +1,16 @@
-import "./mangaInfo.css";
 import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import bbobReactRender from '@bbob/react/es/render';
 import presetReact from '@bbob/preset-react';
 import axios from "axios";
+
+import "./mangaInfo.css";
+
+import { BackToHome } from "./helper";
+
 const baseURL = 'https://wandering-sound-dad3.nabilomi.workers.dev/';
 
-export function Manga({ match }) {
+export default function Manga({ match }) {
     const mangaID = match.params.id;
     const [chapterList, setChapterList] = useState([]);
     const [mangaInfo, setMangaInfo] = useState({});
@@ -164,13 +168,5 @@ function Chapter(props) {
         <Link className="chapter-container" to={{pathname: `/chapter/${chapterID}/${chapterIndex}/${offset}`}}>
             <p className="chapter">Chapter {chapter}</p>
         </Link>
-    )
-}
-
-export function BackToHome() {
-    return (
-        <div className="home-btn">
-            <a className="home-btn-link" href="/"><button>Home</button></a>
-        </div>
     )
 }

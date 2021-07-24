@@ -1,11 +1,13 @@
-import "./home.css";
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
-require('dotenv').config();
+
+import "./home.css";
+
+import React, { useState, useEffect } from "react";
+import { Offsets, MangaList } from "./helper";
+
 const baseURL = 'https://wandering-sound-dad3.nabilomi.workers.dev/';
 
-export function Home() {
+export default function Home() {
     return (
         <div className="init-container">
             <SiteHeader />
@@ -102,11 +104,15 @@ function SearchManga() {
 
     return (<>
         <div className="manga-search-container">
-            <form onSubmit={triggerUseEffect}>
+            <form className="form" onSubmit={triggerUseEffect}>
             <input className="manga-submit" type="text" value={mangaTitle} onChange={(e) => {
                 setMangaTitle(e.target.value);
                 setOffset(0);
-            }} id="manga-search" placeholder="Press enter to search." />
+            }} id="manga-search" placeholder="Search by title" />
+            <div className="submit-advanced">
+                {/* <input type="checkbox"></input> */}
+                <button className="submit-button" type="submit">✓</button>
+            </div>
             </form>
         </div>
 
@@ -118,86 +124,4 @@ function SearchManga() {
 
         {error ? <p className="submit-error">An error has ocurred! Check console for more details. <button onClick={clearError}><strong>Clear</strong></button></p> : <></>}
     </>)
-}
-
-export function MangaList(props) {
-    const mangas = props.mangaArray;
-    return (<>
-        {(mangas.length > 0) ? mangas.map(manga => <MangaCard className="manga-card-i" key={manga.mangaID} manga={manga} />) : <p className="submit-error">Nothing found. Try another title?</p>}
-    </>)
-}
-
-export function MangaCard(props) {
-    let {
-        title,
-        description,
-        mangaID,
-        coverLink
-    } = props.manga;
-    return (
-        <Link to={`/manga/${mangaID}`}>
-            <button className="manga-card">
-                <img className="manga-img" src={coverLink} alt="cover" />
-                <div className="manga-text-info">
-                    <p className="manga-title" to={`/manga/${mangaID}`}><strong>{title}</strong></p>
-                    <p className="manga-desc">{description}</p>
-                </div>
-            </button>
-        </Link>
-    )
-}
-
-export function Offsets(props) {
-    const { offset, setOffset, totalManga } = props;
-    function incrementOffset() {
-        let nearestOffsetMax = Math.ceil(totalManga / 25) * 25;
-        if(offset === nearestOffsetMax - 25)
-            return;
-        else
-            setOffset(offset + 25);
-    }
-
-    function decrementOffset() {
-        if (offset >= 25)
-            setOffset(offset - 25);
-        if (offset < 25)
-            return;
-    }
-
-    function resetOffset() {
-        setOffset(0);
-    }
-
-    function topFunction() {
-        if(window.scrollY > 600) {
-            window.scroll({
-                top: 0,
-                left: 0,
-                behavior: 'smooth'
-            });
-        } else {
-            return;
-        }
-            
-    }
-
-    return (
-        <div className="offset-container">
-            <div className="offset-buttons-container">
-                <button className="offset" id="prev" onClick={() => {
-                        decrementOffset();
-                        topFunction();
-                }}>&lt;</button>
-                <button className="offset" id="" onClick={() => {
-                    resetOffset();
-                    topFunction();
-                }}>1</button>
-                <button className="offset" id="next" onClick={()=> {
-                    incrementOffset();
-                    topFunction();
-                }}>&gt;</button>
-            </div>
-            <p className="submit-error">Page: {(offset + 25) / 25} / {Math.ceil(totalManga / 25)}</p>
-        </div>
-    )
 }

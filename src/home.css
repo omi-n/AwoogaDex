@@ -63,7 +63,24 @@ a {
 }
 
 .manga-search-container {
+    display: flex;
+    flex-direction: column;
     margin-bottom: 1rem;
+}
+
+.submit-button {
+    width: 12rem;
+    font-size: 1rem;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.submit-advanced {
+    align-self: center;
+    margin-top: 1rem;
 }
 
 .site-header-container {
