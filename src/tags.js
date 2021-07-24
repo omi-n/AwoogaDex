@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import "./tags.css";
 import { MangaList, Offsets } from "./home";
+import { BackToHome } from "./mangaInfo";
 
 const baseURL = 'https://wandering-sound-dad3.nabilomi.workers.dev/';
 const limit = 10;
@@ -66,6 +67,7 @@ export default function Tags(props) {
     return (
         <div className="init-container tag-container">
             <h1>{tagName}</h1>
+            <BackToHome />
             <Offsets offset={offset} setOffset={setOffset} totalManga={totalManga} />
             <MangaList mangaArray={mangaArray} />
             <Offsets offset={offset} setOffset={setOffset} totalManga={totalManga} />

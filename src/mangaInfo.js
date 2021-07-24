@@ -6,7 +6,7 @@ import presetReact from '@bbob/preset-react';
 import axios from "axios";
 const baseURL = 'https://wandering-sound-dad3.nabilomi.workers.dev/';
 
-export default function Manga({ match }) {
+export function Manga({ match }) {
     const mangaID = match.params.id;
     const [chapterList, setChapterList] = useState([]);
     const [mangaInfo, setMangaInfo] = useState({});
@@ -167,7 +167,7 @@ function Chapter(props) {
     )
 }
 
-function BackToHome() {
+export function BackToHome() {
     return (
         <div className="home-btn">
             <a className="home-btn-link" href="/"><button>Home</button></a>
