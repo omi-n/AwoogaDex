@@ -13,7 +13,7 @@
 ## Features
 Not many, that's pretty much the whole point.
 - Title Search
-- Tag Search
+- Tag Search (only within the manga info page for now)
 - Reader
 - Pre-loads all manga images with the mangadex compressed image files.
 
