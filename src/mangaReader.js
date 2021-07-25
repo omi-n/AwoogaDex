@@ -280,10 +280,22 @@ function PageReader(props) {
                 </Link>
             </div>
             <div className="nav-buttons">
-                {(pageNumber > 0) ? <button className="change-page" onClick={decrementPageNumber}>&lt;</button> : <Link className="change-page noSelect" to={{pathname: `/chapter/${prevChapter}/${linkDecChapterIndex}/${linkDecOffset}`}}><button className="chapter-button">&lt;</button></Link>}
-                <button className="change-page" onClick={startPageNumber}>&lt;&lt;</button>
-                <button className="change-page" onClick={endPageNumber}>&gt;&gt;</button>
-                {(pageNumber < pages.length - 1) ? <button className="change-page" onClick={incrementPageNumber}>&gt;</button> : <Link className="change-page noSelect" to={{pathname: `/chapter/${nextChapter}/${linkIncChapterIndex}/${linkIncOffset}`}}><button className="chapter-button">&gt;</button></Link>}
+                {(pageNumber > 0) ? <button className="change-page" onClick={() => {
+                    decrementPageNumber();
+                    topFunction();
+                }}>&lt;</button> : <Link className="change-page noSelect" to={{pathname: `/chapter/${prevChapter}/${linkDecChapterIndex}/${linkDecOffset}`}}><button className="chapter-button">&lt;</button></Link>}
+                <button className="change-page" onClick={() => {
+                    startPageNumber();
+                    topFunction();
+                }}>&lt;&lt;</button>
+                <button className="change-page" onClick={() => {
+                    endPageNumber();
+                    topFunction();
+                }}>&gt;&gt;</button>
+                {(pageNumber < pages.length - 1) ? <button className="change-page" onClick={() => {
+                    incrementPageNumber();
+                    topFunction();
+                }}>&gt;</button> : <Link className="change-page noSelect" to={{pathname: `/chapter/${nextChapter}/${linkIncChapterIndex}/${linkIncOffset}`}}><button className="chapter-button">&gt;</button></Link>}
             </div>
             <form id="style-dropdown" onSubmit={e => changeStyle(e)} className="style-dropdown">
                 <select id="mobile-submit" type="submit" name="style" onChange={e => setImgDisplay(e.target.value)} >
@@ -299,11 +311,13 @@ function PageReader(props) {
             <div className="click-to-change">
                 {/* eslint-disable-next-line */}
                 <span readOnly className="change-page-i noSelect" type="text" id="myBtn" onClick={() => {
-                    incrementPageNumber(); topFunction();
+                    incrementPageNumber(); 
+                    topFunction();
                 }}></span>
                 {/* eslint-disable-next-line */}
                 <span readOnly className="change-page-i noSelect" type="text" id="myBtn" onClick={() => {
-                    incrementPageNumber(); topFunction();
+                    incrementPageNumber(); 
+                    topFunction();
                 }}></span>
             </div>
             <div className="dummy-div"></div>
