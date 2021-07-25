@@ -186,6 +186,7 @@ function PageReader(props) {
     }
 
     function incrementPageNumber() {
+        topFunction();
         if(pageNumber < pages.length - 1) {
             setPageNumber(pageNumber + 1);
         } else if(pageNumber >= pages.length - 1) {
@@ -194,6 +195,7 @@ function PageReader(props) {
     }
 
     function decrementPageNumber() {
+        topFunction();
         if(pageNumber > 0) {
             setPageNumber(pageNumber - 1);
         } else if(pageNumber <= 0) {
@@ -202,37 +204,47 @@ function PageReader(props) {
     }
 
     function endPageNumber() {
+        topFunction();
         setPageNumber(pages.length - 1);
     }
 
     function startPageNumber() {
+        topFunction();
         setPageNumber(0);
     }
 
     function handler({ key }) {
         switch(key) {
             case 'ArrowRight':
-                incrementPageNumber();
+                (pageNumber < pages.length - 1) ? incrementPageNumber() : document.getElementById("next-chapter").click();
                 topFunction();
                 break;
             case 'D':
-                incrementPageNumber();
+                (pageNumber < pages.length - 1) ? incrementPageNumber() : document.getElementById("next-chapter").click();
                 topFunction();
                 break;
             case 'd':
-                incrementPageNumber();
+                (pageNumber < pages.length - 1) ? incrementPageNumber() : document.getElementById("next-chapter").click();
                 topFunction();
                 break;
             case 'ArrowLeft':
-                decrementPageNumber();
+                (pageNumber > 0) ? decrementPageNumber() : document.getElementById("prev-chapter").click();
                 topFunction();
                 break;
             case 'A':
-                decrementPageNumber();
+                (pageNumber > 0) ? decrementPageNumber() : document.getElementById("prev-chapter").click();
                 topFunction();
                 break;
             case 'a':
-                decrementPageNumber();
+                (pageNumber > 0) ? decrementPageNumber() : document.getElementById("prev-chapter").click();
+                topFunction();
+                break;
+            case ',':
+                document.getElementById("prev-chapter").click();
+                topFunction();
+                break;
+            case '.':
+                document.getElementById("next-chapter").click();
                 topFunction();
                 break;
             default:
@@ -271,30 +283,26 @@ function PageReader(props) {
             <BackToMangaPage mangaID={mangaID} />
             <div className="chapter-buttons">
                 {/* eslint-disable-next-line */}
-                <Link className="change-chapter noSelect" to={{pathname: `/chapter/${prevChapter}/${linkDecChapterIndex}/${linkDecOffset}`}}>
+                <Link id="prev-chapter" className="change-chapter noSelect" to={{pathname: `/chapter/${prevChapter}/${linkDecChapterIndex}/${linkDecOffset}`}}>
                     <button className="chapter-button">Prev Chapter</button>
                 </Link>
                 {/* eslint-disable-next-line */}
-                <Link className="change-chapter noSelect" to={{pathname: `/chapter/${nextChapter}/${linkIncChapterIndex}/${linkIncOffset}`}}>
+                <Link id="next-chapter" className="change-chapter noSelect" to={{pathname: `/chapter/${nextChapter}/${linkIncChapterIndex}/${linkIncOffset}`}}>
                     <button className="chapter-button">Next Chapter</button>
                 </Link>
             </div>
             <div className="nav-buttons">
                 {(pageNumber > 0) ? <button className="change-page" onClick={() => {
                     decrementPageNumber();
-                    topFunction();
                 }}>&lt;</button> : <Link className="change-page noSelect" to={{pathname: `/chapter/${prevChapter}/${linkDecChapterIndex}/${linkDecOffset}`}}><button className="chapter-button">&lt;</button></Link>}
                 <button className="change-page" onClick={() => {
                     startPageNumber();
-                    topFunction();
                 }}>&lt;&lt;</button>
                 <button className="change-page" onClick={() => {
                     endPageNumber();
-                    topFunction();
                 }}>&gt;&gt;</button>
                 {(pageNumber < pages.length - 1) ? <button className="change-page" onClick={() => {
                     incrementPageNumber();
-                    topFunction();
                 }}>&gt;</button> : <Link className="change-page noSelect" to={{pathname: `/chapter/${nextChapter}/${linkIncChapterIndex}/${linkIncOffset}`}}><button className="chapter-button">&gt;</button></Link>}
             </div>
             <form id="style-dropdown" onSubmit={e => changeStyle(e)} className="style-dropdown">
@@ -312,12 +320,10 @@ function PageReader(props) {
                 {/* eslint-disable-next-line */}
                 <span readOnly className="change-page-i noSelect" type="text" id="myBtn" onClick={() => {
                     incrementPageNumber(); 
-                    topFunction();
                 }}></span>
                 {/* eslint-disable-next-line */}
                 <span readOnly className="change-page-i noSelect" type="text" id="myBtn" onClick={() => {
                     incrementPageNumber(); 
-                    topFunction();
                 }}></span>
             </div>
             <div className="dummy-div"></div>
