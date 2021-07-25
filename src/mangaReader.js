@@ -265,6 +265,7 @@ function PageReader(props) {
     }
 
     return (<div>
+        {/* TODO: ADD CHANGING TITLES */}
         <div className="sidebar">
             <BackToHome />
             <BackToMangaPage mangaID={mangaID} />
@@ -279,10 +280,10 @@ function PageReader(props) {
                 </Link>
             </div>
             <div className="nav-buttons">
-                <button className="change-page" onClick={decrementPageNumber}>&lt;</button>
+                {(pageNumber > 0) ? <button className="change-page" onClick={decrementPageNumber}>&lt;</button> : <Link className="change-page noSelect" to={{pathname: `/chapter/${prevChapter}/${linkDecChapterIndex}/${linkDecOffset}`}}><button className="chapter-button">&lt;</button></Link>}
                 <button className="change-page" onClick={startPageNumber}>&lt;&lt;</button>
                 <button className="change-page" onClick={endPageNumber}>&gt;&gt;</button>
-                <button className="change-page" onClick={incrementPageNumber}>&gt;</button>
+                {(pageNumber < pages.length - 1) ? <button className="change-page" onClick={incrementPageNumber}>&gt;</button> : <Link className="change-page noSelect" to={{pathname: `/chapter/${nextChapter}/${linkIncChapterIndex}/${linkIncOffset}`}}><button className="chapter-button">&gt;</button></Link>}
             </div>
             <form id="style-dropdown" onSubmit={e => changeStyle(e)} className="style-dropdown">
                 <select id="mobile-submit" type="submit" name="style" onChange={e => setImgDisplay(e.target.value)} >
