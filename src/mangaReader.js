@@ -213,9 +213,27 @@ function PageReader(props) {
         switch(key) {
             case 'ArrowRight':
                 incrementPageNumber();
+                topFunction();
+                break;
+            case 'D':
+                incrementPageNumber();
+                topFunction();
+                break;
+            case 'd':
+                incrementPageNumber();
+                topFunction();
                 break;
             case 'ArrowLeft':
                 decrementPageNumber();
+                topFunction();
+                break;
+            case 'A':
+                decrementPageNumber();
+                topFunction();
+                break;
+            case 'a':
+                decrementPageNumber();
+                topFunction();
                 break;
             default:
                 break;
