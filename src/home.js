@@ -110,10 +110,10 @@ function SearchManga() {
                 setMangaTitle(e.target.value);
                 setOffset(0);
             }} id="manga-search" placeholder="Search by title" />
-            <div className="submit-advanced">
-                {/* <input type="checkbox"></input> */}
+            {/* <div className="submit-advanced">
+                <input type="checkbox"></input>
                 <button className="submit-button" type="submit">✓</button>
-            </div>
+            </div> */}
             </form>
         </div>
 

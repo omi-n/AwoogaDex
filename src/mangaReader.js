@@ -319,12 +319,12 @@ function PageReader(props) {
             <div className="click-to-change">
                 {/* eslint-disable-next-line */}
                 <span readOnly className="change-page-i noSelect" type="text" id="myBtn" onClick={() => {
-                    incrementPageNumber(); 
+                    decrementPageNumber(); 
                 }}></span>
                 {/* eslint-disable-next-line */}
-                <span readOnly className="change-page-i noSelect" type="text" id="myBtn" onClick={() => {
+                {(pageNumber < pages.length - 1) ? <span readOnly className="change-page-i noSelect" type="text" id="myBtn" onClick={() => {
                     incrementPageNumber(); 
-                }}></span>
+                }}></span> : <Link className="change-page-i noSelect" to={{pathname: `/chapter/${nextChapter}/${linkIncChapterIndex}/${linkIncOffset}`}}></Link>}
             </div>
             <div className="dummy-div"></div>
             <div className="reader-container">
