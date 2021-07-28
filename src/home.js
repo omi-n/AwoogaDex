@@ -34,6 +34,8 @@ function SearchManga() {
     const [offset, setOffset] = useState(0);
     const [totalManga, setTotalManga] = useState(0);
     const [submit, setSubmit] = useState(0);
+    const [expanded, setExpanded] = useState(false);
+    const [tags, setTags] = useState([]);
     const limit = 10;
     const mangaBaseURL = `${baseURL}/manga?includes[]=cover_art`; // "https://api.mangadex.org/manga"
 
@@ -49,7 +51,8 @@ function SearchManga() {
                     limit: limit,
                     title: mangaTitle,
                     contentRating: ["safe", "suggestive"],
-                    offset: offset
+                    offset: offset,
+                    includedTags: tags
                 }
             }).then(response => {
                 setMangaArray([]);
@@ -103,6 +106,11 @@ function SearchManga() {
         setError(false);
     }
 
+    function expandSettings() {
+        setExpanded(!expanded);
+        setTags([]);
+    }
+
     return (<>
         <div className="manga-search-container">
             <form className="form" onSubmit={triggerUseEffect}>
@@ -110,10 +118,9 @@ function SearchManga() {
                 setMangaTitle(e.target.value);
                 setOffset(0);
             }} id="manga-search" placeholder="Search by title" />
-            {/* <div className="submit-advanced">
-                <input type="checkbox"></input>
-                <button className="submit-button" type="submit">✓</button>
-            </div> */}
+            <input type="submit" style={{display: "none"}}></input>
+                <button onClick={expandSettings} id="submit-btn">Advanced Settings</button>
+                {expanded ? <AdvancedSettings tags={tags} setTags={setTags} /> : <></>}
             </form>
         </div>
 
@@ -125,4 +132,66 @@ function SearchManga() {
 
         {error ? <p className="submit-error">An error has ocurred! Check console for more details. <button onClick={clearError}><strong>Clear</strong></button></p> : <></>}
     </>)
+}
+
+function AdvancedSettings(props) {
+    const { tags, setTags } = props;
+    function handleCheck(e) {
+        console.log(e.target);
+        if(e.target.checked) {
+            console.log("checked");
+            setTags([...tags, e.target.value]);
+        } else if(!e.target.checked) {
+            console.log("unchecked");
+            if(tags.filter(val => {
+                return val === e.target.value
+            })) {
+                setTags([...tags].filter(val => {
+                    return !(val === e.target.value);
+                }))
+            }
+        }
+    }
+
+    useEffect(() => {
+        console.log(tags);
+    }, [tags])
+
+    const tagOption = [
+        {name: "Action", tagId: "391b0423-d847-456f-aff0-8b0cfc03066b"},
+        {name: "Thriller", tagId: "07251805-a27e-4d59-b488-f0bfbec15168"},
+        {name: "Sci-Fi", tagId: "256c8bd9-4904-4360-bf4f-508a76d67183"},
+        {name: "Historical", tagId: "33771934-028e-4cb3-8744-691e866a923e"},
+        {name: "Romance", tagId: "423e2eae-a7a2-4a8b-ac03-a8351462d71d"},
+        {name: "Comedy", tagId: "4d32cc48-9f00-4cca-9b5a-a839f0764984"},
+        {name: "Mecha", tagId: "50880a9d-5440-4732-9afb-8f457127e836"},
+        {name: "Crime", tagId: "5ca48985-9a9d-4bd8-be29-80dc0303db72"},
+        {name: "Sports", tagId: "69964a64-2f90-4d33-beeb-f3ed2875eb4c"},
+        {name: "Superhero", tagId: "7064a261-a137-4d3a-8848-2d385de3a99c"},
+        {name: "Adventure", tagId: "87cc87cd-a395-47af-b27a-93258283bbc6"},
+        {name: "Isekai", tagId: "ace04997-f6bd-436e-b261-779182193d3d"},
+        {name: "Philosophical", tagId: "b1e97889-25b4-4258-b28b-cd7f4d28ea9b"},
+        {name: "Drama", tagId: "b9af3a63-f058-46de-a9a0-e0c13906197a"},
+        {name: "Horror", tagId: "cdad7e68-1419-41dd-bdce-27753074a640"},
+        {name: "Fantasy", tagId: "cdc58593-87dd-415e-bbc0-2ec27bf404cc"},
+        {name: "Slice of Life", tagId: "e5301a23-ebd9-49dd-a0cb-2add944c7fe9"},
+        {name: "Mystery", tagId: "ee968100-4191-4968-93d3-f82d72be7e46"},
+        {name: "Tragedy", tagId: "f8f62932-27da-4fe4-8ee1-6779a8c5edba"}
+    ].map((value, index) => {
+        return (
+            <div key={index}>
+                <label>
+                    {value.name}
+                    <input className="tags" type="checkbox" value={value.tagId} onChange={e => handleCheck(e)} />
+                </label>
+            </div>
+        )
+    });
+
+    return (
+        <div className="advanced-settings">
+            {tagOption}
+            {tags}
+        </div>
+    )
 }

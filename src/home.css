@@ -78,11 +78,6 @@ a {
     flex-direction: column;
 }
 
-.submit-advanced {
-    align-self: center;
-    margin-top: 1rem;
-}
-
 .site-header-container {
     margin-bottom: 6vh;
 }
@@ -164,16 +159,17 @@ a {
     margin-bottom: 0;
 }
 
-#submit-button {
-    display: none;
-}
-
 #prev {
     margin-right: .5rem;
 }
 
 #next {
     margin-left: .5rem;
+}
+
+#submit-btn {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
 }
 
 
