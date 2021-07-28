@@ -220,9 +220,10 @@ function AdvancedSettings(props) {
                 {tagOption}
             </div>
             <h3><strong>EXCLUDE</strong></h3>
-            <div className="extag-options">
+            <div className="tag-options">
                 {exTagOptions}
             </div>
+            <button type="submit">Search</button>
         </div>
     )
 }
