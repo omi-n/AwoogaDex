@@ -36,6 +36,7 @@ function SearchManga() {
     const [submit, setSubmit] = useState(0);
     const [expanded, setExpanded] = useState(false);
     const [tags, setTags] = useState([]);
+    const [exTags, setExTags] = useState([]);
     const limit = 10;
     const mangaBaseURL = `${baseURL}/manga?includes[]=cover_art`; // "https://api.mangadex.org/manga"
 
@@ -52,7 +53,8 @@ function SearchManga() {
                     title: mangaTitle,
                     contentRating: ["safe", "suggestive"],
                     offset: offset,
-                    includedTags: tags
+                    includedTags: tags,
+                    excludedTags: exTags
                 }
             }).then(response => {
                 setMangaArray([]);
@@ -109,6 +111,7 @@ function SearchManga() {
     function expandSettings() {
         setExpanded(!expanded);
         setTags([]);
+        setExTags([]);
     }
 
     return (<>
@@ -120,7 +123,7 @@ function SearchManga() {
             }} id="manga-search" placeholder="Search by title" />
             <input type="submit" style={{display: "none"}}></input>
                 <button onClick={expandSettings} id="submit-btn">Advanced Settings</button>
-                {expanded ? <AdvancedSettings tags={tags} setTags={setTags} /> : <></>}
+                {expanded ? <AdvancedSettings tags={tags} setTags={setTags} exTags={exTags} setExTags={setExTags} /> : <></>}
             </form>
         </div>
 
@@ -135,7 +138,7 @@ function SearchManga() {
 }
 
 function AdvancedSettings(props) {
-    const { tags, setTags } = props;
+    const { tags, setTags, exTags, setExTags } = props;
     function handleCheck(e) {
         if(e.target.checked) {
             setTags([...tags, e.target.value]);
@@ -150,7 +153,22 @@ function AdvancedSettings(props) {
         }
     }
 
-    const tagOption = [
+    function handleExCheck(e) {
+        if(e.target.checked) {
+            setExTags([...exTags, e.target.value]);
+        } else if(!e.target.checked) {
+            if(tags.filter(val => {
+                return val === e.target.value
+            })) {
+                setExTags([...exTags].filter(val => {
+                    return !(val === e.target.value);
+                }))
+            }
+     
+        }
+    }
+
+    const mainTags = [
         {name: "Action", tagId: "391b0423-d847-456f-aff0-8b0cfc03066b"},
         {name: "Thriller", tagId: "07251805-a27e-4d59-b488-f0bfbec15168"},
         {name: "Sci-Fi", tagId: "256c8bd9-4904-4360-bf4f-508a76d67183"},
@@ -170,7 +188,9 @@ function AdvancedSettings(props) {
         {name: "Slice of Life", tagId: "e5301a23-ebd9-49dd-a0cb-2add944c7fe9"},
         {name: "Mystery", tagId: "ee968100-4191-4968-93d3-f82d72be7e46"},
         {name: "Tragedy", tagId: "f8f62932-27da-4fe4-8ee1-6779a8c5edba"}
-    ].map((value, index) => {
+    ];
+
+    const tagOption = mainTags.map((value, index) => {
         return (
             <div key={index}>
                 <label>
@@ -181,10 +201,29 @@ function AdvancedSettings(props) {
         )
     });
 
+    const exTagOptions = mainTags.map((value, index) => {
+        return (
+            <div key={index}>
+                <label>
+                    {value.name}
+                    <input className="exTags" type="checkbox" value={value.tagId} onChange={e => handleExCheck(e)} />
+                </label>
+            </div>
+        )
+    });
+
     return (
         <div className="advanced-settings">
-            {tagOption}
+            <p>INCLUSIVE</p>
+            <div className="tag-options">
+                {tagOption}
+            </div>
             {tags}
+            <p>EXCLUSIVE</p>
+            <div className="extag-options">
+                {exTagOptions}
+            </div>
+            {exTags}
         </div>
     )
 }

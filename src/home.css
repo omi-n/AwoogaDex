@@ -149,6 +149,21 @@ a {
     display: none;
 }
 
+.advanced-settings {
+    display: flex;
+    flex-direction: column;
+}
+
+.tag-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.extag-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
 /* IDs */
 #manga-search {
     width: 50vw;
