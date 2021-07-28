@@ -139,6 +139,8 @@ function SearchManga() {
 
 function AdvancedSettings(props) {
     const { tags, setTags, exTags, setExTags } = props;
+
+    /* I am far too lazy to one function to work for both. I copied and pasted the function.*/
     function handleCheck(e) {
         if(e.target.checked) {
             setTags([...tags, e.target.value]);
@@ -152,7 +154,6 @@ function AdvancedSettings(props) {
             }
         }
     }
-
     function handleExCheck(e) {
         if(e.target.checked) {
             setExTags([...exTags, e.target.value]);
@@ -192,10 +193,10 @@ function AdvancedSettings(props) {
 
     const tagOption = mainTags.map((value, index) => {
         return (
-            <div key={index}>
-                <label>
+            <div className="tags-container" key={index}>
+                <input id={value.tagId} className="tags" type="checkbox" value={value.tagId} onChange={e => handleCheck(e)} />
+                <label htmlFor={value.tagId} className="tag-label">
                     {value.name}
-                    <input className="tags" type="checkbox" value={value.tagId} onChange={e => handleCheck(e)} />
                 </label>
             </div>
         )
@@ -203,10 +204,10 @@ function AdvancedSettings(props) {
 
     const exTagOptions = mainTags.map((value, index) => {
         return (
-            <div key={index}>
-                <label>
+            <div className="tags-container" key={index}>
+                <input id={value.tagId+1} className="tags" type="checkbox" value={value.tagId} onChange={e => handleExCheck(e)} />
+                <label htmlFor={value.tagId+1} className="tag-label">
                     {value.name}
-                    <input className="exTags" type="checkbox" value={value.tagId} onChange={e => handleExCheck(e)} />
                 </label>
             </div>
         )
@@ -214,16 +215,14 @@ function AdvancedSettings(props) {
 
     return (
         <div className="advanced-settings">
-            <p>INCLUSIVE</p>
+            <h3><strong>INCLUDE</strong></h3>
             <div className="tag-options">
                 {tagOption}
             </div>
-            {tags}
-            <p>EXCLUSIVE</p>
+            <h3><strong>EXCLUDE</strong></h3>
             <div className="extag-options">
                 {exTagOptions}
             </div>
-            {exTags}
         </div>
     )
 }

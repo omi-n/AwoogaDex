@@ -156,13 +156,40 @@ a {
 
 .tag-options {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
 }
 
 .extag-options {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
 }
+
+.tags {
+    display: none;
+}
+
+.tag-label {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;       
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    padding: .5rem;
+    background-color: rgb(40, 40, 40);
+    border-radius: 5px;
+    transition: .2s;
+}
+
+.tags:checked + .tag-label {
+    background-color: whitesmoke;
+    color: black;
+    transition: .2s;
+}
+
+.tags-container {
+    margin: .5rem;
+}
+
 
 /* IDs */
 #manga-search {
