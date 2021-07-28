@@ -185,6 +185,13 @@ a {
     margin: .5rem;
 }
 
+.tag-header {
+    display: flex;
+    height: 3rem;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .advanced-settings {
     background-color: rgb(30, 30, 30);
     padding: 1rem;

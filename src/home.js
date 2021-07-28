@@ -36,6 +36,7 @@ function SearchManga() {
     const [submit, setSubmit] = useState(0);
     const [expanded, setExpanded] = useState(false);
     const [tags, setTags] = useState([]);
+    const [tagsMode, setTagsMode] = useState("AND");
     const [exTags, setExTags] = useState([]);
     const limit = 10;
     const mangaBaseURL = `${baseURL}/manga?includes[]=cover_art`; // "https://api.mangadex.org/manga"
@@ -54,7 +55,9 @@ function SearchManga() {
                     contentRating: ["safe", "suggestive"],
                     offset: offset,
                     includedTags: tags,
-                    excludedTags: exTags
+                    includedTagsMode: tagsMode,
+                    excludedTags: exTags,
+                    excludedTagsMode: "OR"
                 }
             }).then(response => {
                 setMangaArray([]);
@@ -123,7 +126,7 @@ function SearchManga() {
             }} id="manga-search" placeholder="Search by title" />
             <input type="submit" style={{display: "none"}}></input>
                 <button onClick={expandSettings} id="submit-btn">Advanced Settings</button>
-                {expanded ? <AdvancedSettings tags={tags} setTags={setTags} exTags={exTags} setExTags={setExTags} /> : <></>}
+                {expanded ? <AdvancedSettings setTagsMode={setTagsMode} tags={tags} setTags={setTags} exTags={exTags} setExTags={setExTags} /> : <></>}
             </form>
         </div>
 
@@ -138,7 +141,7 @@ function SearchManga() {
 }
 
 function AdvancedSettings(props) {
-    const { tags, setTags, exTags, setExTags } = props;
+    const { tags, setTags, exTags, setExTags, setTagsMode } = props;
 
     /* I am far too lazy to one function to work for both. I copied and pasted the function.*/
     function handleCheck(e) {
@@ -166,6 +169,13 @@ function AdvancedSettings(props) {
                 }))
             }
      
+        }
+    }
+    function handleTagAnd(e) {
+        if(e.target.checked) {
+            setTagsMode("OR");
+        } else if(!e.target.checked) {
+            setTagsMode("AND");
         }
     }
 
@@ -216,11 +226,19 @@ function AdvancedSettings(props) {
     return (
         /* TODO: ADD ANDOR OPTIONS FOR API REQUEST */
         <div className="advanced-settings">
-            <h3><strong>INCLUDE</strong></h3>
+            <div className="tag-header">
+                <h3><strong>INCLUDE</strong></h3>
+                <input id="incland" className="tags" type="checkbox" value="and" onChange={e => handleTagAnd(e)} />
+                <label htmlFor="incland" className="tag-label">
+                    OR
+                </label>
+            </div>
             <div className="tag-options">
                 {tagOption}
             </div>
-            <h3><strong>EXCLUDE</strong></h3>
+            <div className="tag-header">
+                <h3><strong>EXCLUDE</strong></h3>
+            </div>
             <div className="tag-options">
                 {exTagOptions}
             </div>
