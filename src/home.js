@@ -137,12 +137,9 @@ function SearchManga() {
 function AdvancedSettings(props) {
     const { tags, setTags } = props;
     function handleCheck(e) {
-        console.log(e.target);
         if(e.target.checked) {
-            console.log("checked");
             setTags([...tags, e.target.value]);
         } else if(!e.target.checked) {
-            console.log("unchecked");
             if(tags.filter(val => {
                 return val === e.target.value
             })) {
@@ -152,10 +149,6 @@ function AdvancedSettings(props) {
             }
         }
     }
-
-    useEffect(() => {
-        console.log(tags);
-    }, [tags])
 
     const tagOption = [
         {name: "Action", tagId: "391b0423-d847-456f-aff0-8b0cfc03066b"},
