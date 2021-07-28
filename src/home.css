@@ -159,11 +159,6 @@ a {
     grid-template-columns: repeat(4, 1fr);
 }
 
-.extag-options {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-}
-
 .tags {
     display: none;
 }
@@ -258,6 +253,11 @@ a {
     .manga-text-info {
         display: inline;
         padding-bottom: 0;
+    }
+
+    .tag-options {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
     }
 
 

@@ -214,6 +214,7 @@ function AdvancedSettings(props) {
     });
 
     return (
+        /* TODO: ADD ANDOR OPTIONS FOR API REQUEST */
         <div className="advanced-settings">
             <h3><strong>INCLUDE</strong></h3>
             <div className="tag-options">
