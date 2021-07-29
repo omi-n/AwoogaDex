@@ -41,8 +41,6 @@ function SearchManga() {
     const limit = 10;
     const mangaBaseURL = `${baseURL}/manga?includes[]=cover_art`; // "https://api.mangadex.org/manga"
 
-    // TODO: ADD A FILTER BY TAG OPTION
-
     /* Load some mangas as an example to the site */
     useEffect(() => {
         async function loadMangas(limit = 25, imgsize = 256, offset = 0) {
@@ -224,7 +222,6 @@ function AdvancedSettings(props) {
     });
 
     return (
-        /* TODO: ADD ANDOR OPTIONS FOR API REQUEST */
         <div className="advanced-settings">
             <div className="tag-header">
                 <h3><strong>INCLUDE</strong></h3>
