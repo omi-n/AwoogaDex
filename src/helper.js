@@ -51,7 +51,7 @@ export function Offsets(props) {
     function topFunction() {
         if(window.scrollY > 1200) {
             window.scroll({
-                top: 450,
+                top: 400,
                 left: 0,
                 behavior: 'smooth'
             });
@@ -75,6 +75,45 @@ export function Offsets(props) {
                 <button className="offset" id="next" onClick={()=> {
                     incrementOffset();
                     topFunction();
+                }}>&gt;</button>
+            </div>
+            <p className="submit-error">Page: {(offset + 25) / 25} / {Math.ceil(totalManga / 25)}</p>
+        </div>
+    )
+}
+
+export function OffsetsNoTop(props) {
+    const { offset, setOffset, totalManga } = props;
+    function incrementOffset() {
+        let nearestOffsetMax = Math.ceil(totalManga / 25) * 25;
+        if(offset === nearestOffsetMax - 25)
+            return;
+        else
+            setOffset(offset + 25);
+    }
+
+    function decrementOffset() {
+        if (offset >= 25)
+            setOffset(offset - 25);
+        if (offset < 25)
+            return;
+    }
+
+    function resetOffset() {
+        setOffset(0);
+    }
+
+    return (
+        <div className="offset-container">
+            <div className="offset-buttons-container">
+                <button className="offset" id="prev" onClick={() => {
+                        decrementOffset();
+                }}>&lt;</button>
+                <button className="offset" id="" onClick={() => {
+                    resetOffset();
+                }}>1</button>
+                <button className="offset" id="next" onClick={()=> {
+                    incrementOffset();
                 }}>&gt;</button>
             </div>
             <p className="submit-error">Page: {(offset + 25) / 25} / {Math.ceil(totalManga / 25)}</p>

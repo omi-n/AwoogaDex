@@ -145,6 +145,15 @@ a {
     margin: 1rem;
 }
 
+.offset {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;       
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    transition: 0.15s;
+}
+
 .manga-status {
     display: none;
 }

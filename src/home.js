@@ -3,7 +3,7 @@ import axios from "axios";
 import "./home.css";
 
 import React, { useState, useEffect } from "react";
-import { Offsets, MangaList } from "./helper";
+import { Offsets, MangaList, OffsetsNoTop } from "./helper";
 
 const baseURL = 'https://wandering-sound-dad3.nabilomi.workers.dev/';
 
@@ -128,7 +128,7 @@ function SearchManga() {
             </form>
         </div>
 
-        <Offsets offset={offset} setOffset={setOffset} totalManga={totalManga} />
+        <OffsetsNoTop offset={offset} setOffset={setOffset} totalManga={totalManga} />
 
         <MangaList mangaArray={mangaArray} />
 
