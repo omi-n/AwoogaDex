@@ -124,7 +124,7 @@ function SearchManga() {
             }} id="manga-search" placeholder="Search by title" />
             <input type="submit" style={{display: "none"}}></input>
                 <button onClick={expandSettings} id="submit-btn">Advanced Settings</button>
-                {expanded ? <AdvancedSettings setTagsMode={setTagsMode} tags={tags} setTags={setTags} exTags={exTags} setExTags={setExTags} /> : <></>}
+                {expanded ? <AdvancedSettings setOffset={setOffset} setTagsMode={setTagsMode} tags={tags} setTags={setTags} exTags={exTags} setExTags={setExTags} /> : <></>}
             </form>
         </div>
 
@@ -139,7 +139,7 @@ function SearchManga() {
 }
 
 function AdvancedSettings(props) {
-    const { tags, setTags, exTags, setExTags, setTagsMode } = props;
+    const { tags, setTags, exTags, setExTags, setTagsMode, setOffset } = props;
 
     /* I am far too lazy to one function to work for both. I copied and pasted the function.*/
     function handleCheck(e) {
@@ -175,6 +175,9 @@ function AdvancedSettings(props) {
         } else if(!e.target.checked) {
             setTagsMode("AND");
         }
+    }
+    function resetOffset() {
+        setOffset(0);
     }
 
     const mainTags = [
@@ -239,7 +242,7 @@ function AdvancedSettings(props) {
             <div className="tag-options">
                 {exTagOptions}
             </div>
-            <button type="submit">Search</button>
+            <button onClick={resetOffset} type="submit">Search</button>
         </div>
     )
 }

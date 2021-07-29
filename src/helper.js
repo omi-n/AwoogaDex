@@ -49,9 +49,9 @@ export function Offsets(props) {
     }
 
     function topFunction() {
-        if(window.scrollY > 600) {
+        if(window.scrollY > 1200) {
             window.scroll({
-                top: 0,
+                top: 450,
                 left: 0,
                 behavior: 'smooth'
             });
