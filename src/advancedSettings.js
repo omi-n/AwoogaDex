@@ -4,7 +4,7 @@ import { useState } from "react";
 
 export function AdvancedSettings(props) {
     const { tags, setTags, exTags, setExTags, setTagsMode, offset, setOffset, setOrder, submit, setSubmit } = props.master;
-    let checkstat = (window.localStorage.getItem("dataSaverStatus") === "false" ? true : false);
+    let checkstat = (window.localStorage.getItem("dataSaverDisabled") === "true" ? true : false);
     const [checked, setChecked] = useState(checkstat);
 
     /* I am far too lazy to one function to work for both. I copied and pasted the function.*/
@@ -70,10 +70,10 @@ export function AdvancedSettings(props) {
     function dataSaver(e) {
         const localStorage = window.localStorage;
         if(e.target.checked) {
-            localStorage.setItem("dataSaverStatus", "false");
+            localStorage.setItem("dataSaverDisabled", "false");
             setChecked(true);
         } else if(!e.target.checked) {
-            localStorage.setItem("dataSaverStatus", "true");
+            localStorage.setItem("dataSaverDisabled", "true");
             setChecked(false);
         }
     }

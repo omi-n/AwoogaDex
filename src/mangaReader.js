@@ -12,7 +12,7 @@ export default function MangaReader(props) {
     const { chapterID, chapterIndex, offset } = match.params;
     
     const [chapterInfo, setChapterInfo] = useState({});
-    let dataSaverStatus = window.localStorage.getItem("dataSaverStatus");
+    let dataSaverStatus = window.localStorage.getItem("dataSaverDisabled");
     const preloadStatus = true;
     let pages = [];
 
@@ -37,9 +37,9 @@ export default function MangaReader(props) {
                 // console.log(imageBaseUrl);
                 // eslint-disable-next-line react-hooks/exhaustive-deps
                 // push all of the chapter pages into the pages array
-                const pageData = (dataSaverStatus === "true" ? resData.dataSaver : resData.data);
+                const pageData = (dataSaverStatus === "true" ? resData.data : resData.dataSaver);
                 pageData.forEach(page => {
-                    pages.push(`https://uploads.mangadex.org/${dataSaverStatus === "true" ? 'data-saver' : 'data'}/${resData.hash}/${page}`);
+                    pages.push(`https://uploads.mangadex.org/${dataSaverStatus === "true" ? "data" : 'data-saver'}/${resData.hash}/${page}`);
                 });
 
                 setChapterInfo({
