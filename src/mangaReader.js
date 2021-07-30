@@ -312,7 +312,7 @@ function PageReader(props) {
                 </select>
                 <button className="form-submit" type="submit">✓</button>
             </form>
-            <p className="page-number">Chapter {chapter} Page {pageNumber + 1}</p>
+            <p className="page-number">Chapter {chapter} Page {pageNumber + 1} / {pages.length}</p>
         </div>
         <div className="reader-page" id="top">
             <div className="click-to-change">
