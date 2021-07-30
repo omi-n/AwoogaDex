@@ -70,10 +70,10 @@ export function AdvancedSettings(props) {
     function dataSaver(e) {
         const localStorage = window.localStorage;
         if(e.target.checked) {
-            localStorage.setItem("dataSaverDisabled", "false");
+            localStorage.setItem("dataSaverDisabled", "true");
             setChecked(true);
         } else if(!e.target.checked) {
-            localStorage.setItem("dataSaverDisabled", "true");
+            localStorage.setItem("dataSaverDisabled", "false");
             setChecked(false);
         }
     }
