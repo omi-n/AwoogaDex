@@ -1,7 +1,11 @@
 import "./home.css";
 
+import { useState } from "react";
+
 export function AdvancedSettings(props) {
     const { tags, setTags, exTags, setExTags, setTagsMode, offset, setOffset, setOrder, submit, setSubmit } = props.master;
+    let checkstat = (window.localStorage.getItem("dataSaverStatus") === "false" ? true : false);
+    const [checked, setChecked] = useState(checkstat);
 
     /* I am far too lazy to one function to work for both. I copied and pasted the function.*/
     function handleCheck(e) {
@@ -61,6 +65,16 @@ export function AdvancedSettings(props) {
             document.getElementById("updatedat").checked = false;
             document.getElementById("createdat").checked = false;
             setOrder();
+        }
+    }
+    function dataSaver(e) {
+        const localStorage = window.localStorage;
+        if(e.target.checked) {
+            localStorage.setItem("dataSaverStatus", "false");
+            setChecked(true);
+        } else if(!e.target.checked) {
+            localStorage.setItem("dataSaverStatus", "true");
+            setChecked(false);
         }
     }
 
@@ -147,6 +161,17 @@ export function AdvancedSettings(props) {
                     <label htmlFor="none" className="tag-label">
                         None
                     </label>
+                </div>
+            </div>
+            <div className="tag-header">
+                <h3><strong>DATA SAVER</strong></h3>
+            </div>
+            <div className="tag-options">
+                <div>
+                    <input checked={checked} id="data" className="tags" type="checkbox" value="data" onChange={e => dataSaver(e)} />
+                    <label htmlFor="data" className="tag-label">
+                        Disabled
+                    </label>    
                 </div>
             </div>
             <button onClick={e => resetOffset(e)} type="submit">Search</button>
