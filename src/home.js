@@ -84,10 +84,14 @@ function SearchManga() {
                     if(coverFoundStatus)
                         coverFileName = response.relationships[coverIdx].attributes.fileName;
                     mangas.push({
-                        title: response.data.attributes.title.en || "No Title Found.",
+                        title: (response.data.attributes.title.en 
+                            ? response.data.attributes.title.en 
+                            : (response.data.attributes.title.jp ? response.data.attributes.title.jp : "No Title Found.")),
                         mangaID: response.data.id,
                         coverLink: (coverFoundStatus ? `https://uploads.mangadex.org/covers/${mangaID}/${coverFileName}.${imgsize}.jpg` : `https://cdn.discordapp.com/attachments/850613008782196776/866082390454829106/notfound.png`),
-                        description: (response.data.attributes.description.en ? response.data.attributes.description.en.toString().substring(0, 400).concat("...") : "Description not found."),
+                        description: (response.data.attributes.description.en 
+                            ? response.data.attributes.description.en.toString().substring(0, 400).concat("...") 
+                            : "No Description Found."),
                     })
                 };
 
