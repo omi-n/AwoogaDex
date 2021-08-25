@@ -246,6 +246,9 @@ function PageReader(props) {
                 document.getElementById("next-chapter").click();
                 topFunction();
                 break;
+            case 't':
+                topFunction();
+                break;
             default:
                 break;
         }
@@ -255,8 +258,8 @@ function PageReader(props) {
 
     // When the user clicks on the button, scroll to the top of the document
     function topFunction() {
-        // document.body.scrollTop = 0; // For Safari
-        // document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
         window.scroll({
             top: 0,
             left: 0,
