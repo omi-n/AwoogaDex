@@ -51,6 +51,7 @@ function SearchManga() {
                     title: mangaTitle,
                     contentRating: ["safe", "suggestive"],
                     offset: offset,
+                    "order[followedCount]": "desc",
                     includedTags: tags,
                     includedTagsMode: tagsMode,
                     excludedTags: exTags,
