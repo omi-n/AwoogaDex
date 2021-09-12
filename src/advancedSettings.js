@@ -51,12 +51,14 @@ export function AdvancedSettings(props) {
     function handleSortCheck(e) {
         if(e.target.checked && e.target.value === "createdat") {
             document.getElementById("updatedat").checked = false;
+            document.getElementById("none").checked = false;
             setOrder({
                 sortedAt: "createdAt",
                 direction: "desc"
             });
         } else if(e.target.checked && e.target.value === "updatedat") {
             document.getElementById("createdat").checked = false;
+            document.getElementById("none").checked = false;
             setOrder({
                 sortedAt: "updatedAt",
                 direction: "desc"
@@ -64,7 +66,10 @@ export function AdvancedSettings(props) {
         } else if(e.target.checked && e.target.value === "none") {
             document.getElementById("updatedat").checked = false;
             document.getElementById("createdat").checked = false;
-            setOrder();
+            setOrder({
+                sortedAt: "followedCount",
+                direction: "desc"
+            });
         }
     }
     function dataSaver(e) {

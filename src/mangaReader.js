@@ -30,7 +30,7 @@ export default function MangaReader(props) {
                     "order[chapter]": "asc"
                 }
             }).then(async response => {
-                let resData = response.data.results[0].data.attributes;
+                let resData = response.data.data[0].attributes;
                 // get base url to reconstruct the image url. this may not always be needed.
                 // let imageBaseUrl = await axios.get(`${baseURL}/at-home/server/${chapterID}`);
                 // imageBaseUrl.data.baseUrl
@@ -46,7 +46,7 @@ export default function MangaReader(props) {
                     chapter: resData.chapter,
                     volume: (resData.volume ? resData.volume : "?"),
                     pages: pages,
-                    mangaID: response.data.results[0].relationships[1].id
+                    mangaID: response.data.data[0].relationships[1].id
                 });
             }).catch(err => console.error(err));
             _callback();
@@ -118,14 +118,14 @@ function PageReader(props) {
                     "order[chapter]": "asc"
                 }
             }).then(async response => {
-                if(response.data.results[chapterIndexCopy + 1] !== undefined) {
-                    setNextChapter(response.data.results[chapterIndexCopy + 1].data.id);
-                    if(response.data.results[chapterIndexCopy - 1] !== undefined) {
-                        setPrevChapter(response.data.results[chapterIndexCopy - 1].data.id);
-                    } else if(response.data.results[chapterIndexCopy - 1] === undefined) {
+                if(response.data.data[chapterIndexCopy + 1] !== undefined) {
+                    setNextChapter(response.data.data[chapterIndexCopy + 1].id);
+                    if(response.data.data[chapterIndexCopy - 1] !== undefined) {
+                        setPrevChapter(response.data.data[chapterIndexCopy - 1].id);
+                    } else if(response.data.data[chapterIndexCopy - 1] === undefined) {
                         getPrevChapter();
                     }
-                } else if(response.data.results[chapterIndexCopy + 1] === undefined)
+                } else if(response.data.data[chapterIndexCopy + 1] === undefined)
                     setNextChapter(chapterID); 
             }).catch(err => console.error(err));
         }
@@ -149,9 +149,9 @@ function PageReader(props) {
                     "order[chapter]": "asc"
                 }
             }).then(async response => {
-                if(response.data.results[prevChapterIndex - 1] !== undefined)
-                    setPrevChapter(response.data.results[prevChapterIndex - 1].data.id);
-                else if(response.data.results[prevChapterIndex - 1] === undefined)
+                if(response.data.data[prevChapterIndex - 1] !== undefined)
+                    setPrevChapter(response.data.data[prevChapterIndex - 1].id);
+                else if(response.data.data[prevChapterIndex - 1] === undefined)
                     setPrevChapter(chapterID); 
             }).catch(err => console.error(err));
         }

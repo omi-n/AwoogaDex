@@ -39,7 +39,10 @@ function SearchManga() {
     const [tags, setTags] = useState([]);
     const [tagsMode, setTagsMode] = useState("AND");
     const [exTags, setExTags] = useState([]);
-    const [order, setOrder] = useState();
+    const [order, setOrder] = useState({
+        sortedAt: "followedCount",
+        direction: "desc"
+    });
     const limit = 10;
     const mangaBaseURL = `${baseURL}/manga?includes[]=cover_art`; // "https://api.mangadex.org/manga"
 
@@ -51,7 +54,7 @@ function SearchManga() {
                     title: mangaTitle,
                     contentRating: ["safe", "suggestive"],
                     offset: offset,
-                    "order[followedCount]": "desc",
+                    //"order[followedCount]": "desc",
                     includedTags: tags,
                     includedTagsMode: tagsMode,
                     excludedTags: exTags,
@@ -61,6 +64,8 @@ function SearchManga() {
                 params[`order[updatedAt]`] = order.direction;
             else if(order && order.sortedAt === "createdAt")
                 params[`order[createdAt]`] = order.direction;
+            else if(order && order.sortedAt === "followedCount")
+                params[`order[followedCount]`] = order.direction;
             await axios({
                 method: "GET",
                 url: mangaBaseURL, // https://api.mangadex.org/manga
@@ -68,7 +73,7 @@ function SearchManga() {
             }).then(response => {
                 setMangaArray([]);
                 setTotalManga(response.data.total);
-                let responseArr = response.data.results;
+                let responseArr = response.data.data;
                 let coverIdx;
                 let mangas = [];
                 for(response of responseArr) {
@@ -80,18 +85,18 @@ function SearchManga() {
                             coverFoundStatus = true;
                         }
                     }
-                    let mangaID = response.data.id;
+                    let mangaID = response.id;
                     let coverFileName;
                     if(coverFoundStatus)
                         coverFileName = response.relationships[coverIdx].attributes.fileName;
                     mangas.push({
-                        title: (response.data.attributes.title.en 
-                            ? response.data.attributes.title.en 
-                            : (response.data.attributes.title.jp ? response.data.attributes.title.jp : "No Title Found.")),
-                        mangaID: response.data.id,
+                        title: (response.attributes.title.en 
+                            ? response.attributes.title.en 
+                            : (response.attributes.title.jp ? response.attributes.title.jp : "No Title Found.")),
+                        mangaID: response.id,
                         coverLink: (coverFoundStatus ? `https://uploads.mangadex.org/covers/${mangaID}/${coverFileName}.${imgsize}.jpg` : `https://cdn.discordapp.com/attachments/850613008782196776/866082390454829106/notfound.png`),
-                        description: (response.data.attributes.description.en 
-                            ? response.data.attributes.description.en.toString().substring(0, 400).concat("...") 
+                        description: (response.attributes.description.en 
+                            ? response.attributes.description.en.toString().substring(0, 400).concat("...") 
                             : "No Description Found."),
                     })
                 };

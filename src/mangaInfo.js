@@ -27,7 +27,7 @@ export default function Manga({ match }) {
                     ids: [mangaID]
                 }
             }).then(response => {
-                const resData = response.data.results[0];
+                const resData = response.data.data[0];
                 let coverFoundStatus = false;
                 let coverIdx;
                 for (let i = 0; i < resData.relationships.length; i++) {
@@ -39,18 +39,18 @@ export default function Manga({ match }) {
                 const options = { enableEscapeTags: true, onlyAllowTags: ['i', 'hr', 'b', 'u'] }
                 // SHUT UP SHUT UP SHUT UP
                 // eslint-disable-next-line react-hooks/exhaustive-deps
-                let description = bbobReactRender(`${resData.data.attributes.description.en}`, presetReact(), options);
+                let description = bbobReactRender(`${resData.attributes.description.en}`, presetReact(), options);
                 let usefulMangaInfo = {
-                    title: resData.data.attributes.title.en,
+                    title: resData.attributes.title.en,
                     description: description,
-                    status: resData.data.attributes.status,
+                    status: resData.attributes.status,
                     tags: [],
                     cover: (coverFoundStatus ? `https://uploads.mangadex.org/covers/${mangaID}/${coverFileName}.512.jpg` : `https://cdn.discordapp.com/attachments/850613008782196776/866082390454829106/notfound.png`),
                     author: resData.relationships[0].attributes.name,
                     artists: []
                 }
 
-                resData.data.attributes.tags.forEach(tag => {
+                resData.attributes.tags.forEach(tag => {
                     usefulMangaInfo.tags.push({
                         tag: tag.attributes.name.en,
                         tagID: tag.id
@@ -80,13 +80,13 @@ export default function Manga({ match }) {
                     "order[chapter]": "asc"
                 }
             }).then((response => {
-                const resData = response.data.results;
+                const resData = response.data.data;
                 setTotalChapters(response.data.total);
                 let num = 0;
                 resData.forEach(res => {
                     engChap.push({
-                        chapter: res.data.attributes.chapter,
-                        chapterID: res.data.id,
+                        chapter: res.attributes.chapter,
+                        chapterID: res.id,
                         chapterIndex: num
                         // images: resData[i].data.attributes.data,
                         // chapterHash: resData[i].data.attributes.hash
