@@ -30,7 +30,7 @@ export default function Tags(props) {
             }).then(response => {
                 setMangaArray([]);
                 setTotalManga(response.data.total);
-                let responseArr = response.data.results;
+                let responseArr = response.data.data;
                 let coverIdx = 3;
                 let mangas = [];
                 responseArr.forEach(response => {
@@ -41,15 +41,15 @@ export default function Tags(props) {
                             coverFoundStatus = true;
                         }
                     }
-                    let mangaID = response.data.id;
+                    let mangaID = response.id;
                     let coverFileName;
                     if(coverFoundStatus)
                         coverFileName = response.relationships[coverIdx].attributes.fileName;
                     mangas.push({
-                        title: response.data.attributes.title.en || "No Title Found.",
-                        mangaID: response.data.id,
+                        title: response.attributes.title.en || "No Title Found.",
+                        mangaID: response.id,
                         coverLink: (coverFoundStatus ? `https://uploads.mangadex.org/covers/${mangaID}/${coverFileName}.${imgsize}.jpg` : `https://cdn.discordapp.com/attachments/850613008782196776/866082390454829106/notfound.png`),
-                        description: response.data.attributes.description.en.toString().substring(0, 400).concat("..."),
+                        description: response.attributes.description.en.toString().substring(0, 400).concat("..."),
                     });
                 });
 
