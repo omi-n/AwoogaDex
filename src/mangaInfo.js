@@ -49,7 +49,8 @@ export default function Manga({ match }) {
                     author: resData.relationships[0].attributes.name,
                     artists: []
                 }
-
+                document.title = "AwoogaDex: " + usefulMangaInfo.title;
+                document.getElementById("favicon").href = 'https://cdn.discordapp.com/attachments/850613008782196776/887433818473111573/unknown.png';
                 resData.attributes.tags.forEach(tag => {
                     usefulMangaInfo.tags.push({
                         tag: tag.attributes.name.en,

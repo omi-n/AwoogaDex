@@ -48,6 +48,8 @@ export default function MangaReader(props) {
                     pages: pages,
                     mangaID: response.data.data[0].relationships[1].id
                 });
+                document.title = "AwoogaDex";
+                document.getElementById("favicon").href = 'https://cdn.discordapp.com/attachments/850613008782196776/887433818473111573/unknown.png';
             }).catch(err => console.error(err));
             _callback();
         }
