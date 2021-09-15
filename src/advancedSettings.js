@@ -102,7 +102,8 @@ export function AdvancedSettings(props) {
         {name: "Fantasy", tagId: "cdc58593-87dd-415e-bbc0-2ec27bf404cc"},
         {name: "Slice of Life", tagId: "e5301a23-ebd9-49dd-a0cb-2add944c7fe9"},
         {name: "Mystery", tagId: "ee968100-4191-4968-93d3-f82d72be7e46"},
-        {name: "Tragedy", tagId: "f8f62932-27da-4fe4-8ee1-6779a8c5edba"}
+        {name: "Tragedy", tagId: "f8f62932-27da-4fe4-8ee1-6779a8c5edba"},
+        {name: "Long Strip", tagId: "3e2b8dae-350e-4ab8-a8ce-016e844b9f0d"}
     ];
 
     const tagOption = mainTags.map((value, index) => {
