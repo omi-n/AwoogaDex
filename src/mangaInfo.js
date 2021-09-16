@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import bbobReactRender from '@bbob/react/es/render';
 import presetReact from '@bbob/preset-react';
 import axios from "axios";
+import Helmet from 'react-helmet';
 
 import "./mangaInfo.css";
 
@@ -128,7 +129,12 @@ export default function Manga({ match }) {
 
     // TODO: forwards button for offset
     return (
-        <div className="all-content">
+        <div className="all-content"> 
+            <Helmet>
+                <meta id="meta-description" name="description" content={mangaInfo.description} />
+                <meta id="og-title" property="og:title" content={mangaInfo.title} />
+                <meta id="og-image" property="og:image" content={mangaInfo.cover} />
+            </Helmet>
             <BackToHome />
             <div className="manga-info">
                 <img className="manga-info-image" src={mangaInfo.cover} alt="cover" />
