@@ -37,7 +37,11 @@ export default function MangaReader(props) {
                 // console.log(imageBaseUrl);
                 // eslint-disable-next-line react-hooks/exhaustive-deps
                 // push all of the chapter pages into the pages array
-                const pageData = (dataSaverStatus === "true" ? resData.data : resData.dataSaver);
+                const pageData = (
+                    dataSaverStatus === "true" 
+                    ? resData.data 
+                    : resData.dataSaver
+                );
                 pageData.forEach(page => {
                     pages.push(`https://uploads.mangadex.org/${dataSaverStatus === "true" ? "data" : 'data-saver'}/${resData.hash}/${page}`);
                 });
@@ -71,7 +75,9 @@ export default function MangaReader(props) {
     
     return (
         <div id="top">
-            {chapterInfo.pages ? <PageReader chapterID={chapterID} chapterIndex={chapterIndex} offset={offset} chapterInfo={chapterInfo} /> : <p>Preloading all images, please wait. This is to prevent lag while reading.</p>}
+            {chapterInfo.pages 
+            ? <PageReader chapterID={chapterID} chapterIndex={chapterIndex} offset={offset} chapterInfo={chapterInfo} /> 
+            : <p>Preloading all images, please wait. This is to prevent lag while reading.</p>}
         </div>
     )
 }
@@ -271,6 +277,7 @@ function PageReader(props) {
     chapterIndex = Number(chapterIndex);
     offset = Number(offset);
     
+    // There are a lot of edge cases, and im too lazy to figure out a good solution.
     let linkIncChapterIndex = parseInt(chapterIndex === 23 ? 0 : chapterIndex + 1);
     let linkIncOffset = parseInt(chapterIndex === 23 ? offset + 24 : offset);
     let linkDecChapterIndex = parseInt(chapterIndex === 0 ? 23 : chapterIndex - 1);
