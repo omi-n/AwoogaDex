@@ -49,7 +49,8 @@ export default function Manga({ match }) {
                     description: description,
                     status: resData.attributes.status,
                     tags: [],
-                    cover: (coverFoundStatus ? `https://uploads.mangadex.org/covers/${mangaID}/${coverFileName}.512.jpg` : `https://cdn.discordapp.com/attachments/850613008782196776/866082390454829106/notfound.png`),
+                    cover: (coverFoundStatus ? `https://uploads.mangadex.org/covers/${mangaID}/${coverFileName}.512.jpg` 
+                                             : `https://cdn.discordapp.com/attachments/850613008782196776/866082390454829106/notfound.png`),
                     author: resData.relationships[0].attributes.name,
                     artists: []
                 }
@@ -146,10 +147,16 @@ export default function Manga({ match }) {
                     <p>{mangaInfo.description}</p>
                     <p><strong>Status:</strong> {mangaInfo.status}</p>
                     <p><strong>Author:</strong> {mangaInfo.author}</p>
-                    <p className="artists"><strong>Artist(s):</strong> {mangaInfo.artists ? mangaInfo.artists.forEach(artist => `${artist}`) : <p>Artists Not Found.</p>}</p>
+                    <p className="artists">
+                        <strong>Artist(s):</strong> 
+                        {mangaInfo.artists ? mangaInfo.artists.forEach(artist => `${artist}`) : <p>Artists Not Found.</p>}
+                    </p>
                     <p><br /><strong>Tags:</strong></p>
                     <div className="manga-tags">
-                        {mangaInfo.tags && mangaInfo.tags.map(tag => <Link to={{pathname: `/tag/${tag.tagID}/${tag.tag}`}}><button className="tag" key={tag.tagID}>{tag.tag}</button></Link>)}
+                        {mangaInfo.tags && mangaInfo.tags.map(tag => 
+                            <Link to={{pathname: `/tag/${tag.tagID}/${tag.tag}`}}>
+                                <button className="tag" key={tag.tagID}>{tag.tag}</button>
+                            </Link>)}
                     </div>
                 </div>
             </div>
@@ -165,7 +172,8 @@ export default function Manga({ match }) {
             </div>
 
             <div className="chapter-list">
-                {chapterList.length > 0 ? chapterList.map(chapter => <Chapter key={chapter.id} offset={offset} chapter={chapter} />) : <p className="chapter-error">No Further Chapters in the MangaDex API.</p>}
+                {chapterList.length > 0 ? chapterList.map(chapter => <Chapter key={chapter.id} offset={offset} chapter={chapter} />) 
+                                        : <p className="chapter-error">No Further Chapters in the MangaDex API.</p>}
             </div>
         </div>
     )

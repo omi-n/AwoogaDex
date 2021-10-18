@@ -48,7 +48,8 @@ export default function Tags(props) {
                     mangas.push({
                         title: response.attributes.title.en || "No Title Found.",
                         mangaID: response.id,
-                        coverLink: (coverFoundStatus ? `https://uploads.mangadex.org/covers/${mangaID}/${coverFileName}.${imgsize}.jpg` : `https://cdn.discordapp.com/attachments/850613008782196776/866082390454829106/notfound.png`),
+                        coverLink: (coverFoundStatus ? `https://uploads.mangadex.org/covers/${mangaID}/${coverFileName}.${imgsize}.jpg` 
+                                                     : `https://cdn.discordapp.com/attachments/850613008782196776/866082390454829106/notfound.png`),
                         description: response.attributes.description.en.toString().substring(0, 400).concat("..."),
                     });
                 });

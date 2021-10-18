@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 export function MangaList(props) {
     const mangas = props.mangaArray;
     return (<>
-        {(mangas.length > 0) ? mangas.map(manga => <MangaCard className="manga-card-i" key={manga.mangaID} manga={manga} />) : <p className="submit-error">Nothing found. Try another title?</p>}
+        {(mangas.length > 0) ? mangas.map(manga => <MangaCard className="manga-card-i" key={manga.mangaID} manga={manga} />) 
+                             : <p className="submit-error">Nothing found. Try another title?</p>}
     </>)
 }
 
