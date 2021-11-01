@@ -6,6 +6,7 @@ export function AdvancedSettings(props) {
     const { tags, setTags, exTags, setExTags, setTagsMode, offset, setOffset, setOrder, submit, setSubmit } = props.master;
     let checkstat = (window.localStorage.getItem("dataSaverDisabled") === "true" ? true : false);
     const [checked, setChecked] = useState(checkstat);
+    const [asc, setAsc] = useState(false);
 
     /* I am far too lazy to one function to work for both. I copied and pasted the function.*/
     function handleCheck(e) {
@@ -54,21 +55,21 @@ export function AdvancedSettings(props) {
             document.getElementById("none").checked = false;
             setOrder({
                 sortedAt: "createdAt",
-                direction: "desc"
+                direction: (asc ? "asc" : "desc")
             });
         } else if(e.target.checked && e.target.value === "updatedat") {
             document.getElementById("createdat").checked = false;
             document.getElementById("none").checked = false;
             setOrder({
                 sortedAt: "updatedAt",
-                direction: "desc"
+                direction: (asc ? "asc" : "desc")
             });
         } else if(e.target.checked && e.target.value === "none") {
             document.getElementById("updatedat").checked = false;
             document.getElementById("createdat").checked = false;
             setOrder({
                 sortedAt: "followedCount",
-                direction: "desc"
+                direction: (asc ? "asc" : "desc")
             });
         }
     }
@@ -165,7 +166,13 @@ export function AdvancedSettings(props) {
                 <div className="tags-container">
                     <input id="none" className="tags" type="checkbox" value="none" onChange={e => handleSortCheck(e)} />
                     <label htmlFor="none" className="tag-label">
-                        None
+                        Default
+                    </label>
+                </div>
+                <div className="tags-container">
+                    <input id="asc" className="tags" type="checkbox" value="asc" onChange={() => setAsc(!asc)} />
+                    <label htmlFor="asc" className="tag-label">
+                        Ascending
                     </label>
                 </div>
             </div>

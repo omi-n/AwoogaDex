@@ -54,7 +54,6 @@ function SearchManga() {
                     title: mangaTitle,
                     contentRating: ["safe", "suggestive"],
                     offset: offset,
-                    //"order[followedCount]": "desc",
                     availableTranslatedLanguage: ['en'],
                     includedTags: tags,
                     includedTagsMode: tagsMode,
