@@ -20,3 +20,4 @@ Not many, that's pretty much the whole point.
 
 ## Not being worked on anymore
 Mangadex's reader isn't trash anymore.
+If it is worked on anymore, It's probably gonna be remade in next.
