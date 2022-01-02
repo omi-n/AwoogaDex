@@ -1,5 +1,4 @@
-# https://manga.nabilto.com/
-
+# No longer hosted.
 
 ![Home Page](https://cdn.discordapp.com/attachments/850613008782196776/867258981508055100/unknown.png)
 
